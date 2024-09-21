@@ -6,11 +6,6 @@ const { findIndex } = lodash_pkg;
 // this data changes so infrequently). It can still be force 
 // refreshed if necessary 
 
-function is10MinutesOld(jsonTimestamp) {
-  const dayjs = useDayjs()
-  return dayjs.duration(dayjs().diff(jsonTimestamp)).asMinutes() >= 10
-}
-
 export const useUsersStore = defineStore('users', {
   state: () => ({ me: undefined, users: {} }),
   getters: {

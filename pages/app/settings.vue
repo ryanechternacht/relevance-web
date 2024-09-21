@@ -14,6 +14,10 @@
 import { useUsersStore } from '@/stores/users'
 import { storeToRefs } from 'pinia'
 
+definePageMeta({
+  middleware: ['enforce-gmail-login'],
+})
+
 const usersStore = useUsersStore()
 const { getMeCached } = storeToRefs(usersStore)
 

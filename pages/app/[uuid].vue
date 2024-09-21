@@ -26,6 +26,10 @@
 import { useOutreachStore } from '@/stores/outreach'
 import { storeToRefs } from 'pinia'
 
+definePageMeta({
+  middleware: ['enforce-gmail-login'],
+})
+
 const outreachStore = useOutreachStore()
 const { getOutreachByUuid } = storeToRefs(outreachStore)
 
