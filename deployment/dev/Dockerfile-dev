@@ -1,0 +1,28 @@
+FROM --platform=linux/amd64 node:18-alpine as builder
+
+# create destination directory
+RUN mkdir -p /nuxt-app
+WORKDIR /nuxt-app
+
+# copy the app, note .dockerignore
+COPY . /nuxt-app/
+COPY ./deployment/dev/app.config.js /nuxt-app/
+
+RUN yarn install && \
+  yarn build
+
+FROM --platform=linux/amd64 node:18-alpine as runner
+ENV NODE_ENV=production
+
+RUN mkdir -p /app
+WORKDIR /app
+
+COPY --from=builder /nuxt-app/.output/ .
+
+EXPOSE 3000
+
+# Not fully sure what this does, 
+# but without it the image is borked
+ENV NUXT_HOST=0.0.0.0
+
+CMD ["node", "server/index.mjs"]
