@@ -1,14 +1,14 @@
 <template>
-  <div class="w-full flex flex-row items-center justify-between px-12 py-8">
+  <div class="layout">
     <slot name="action-items">
       <div></div>
     </slot>
 
-    <div>
+    <div class="w-full flex flex-row items-center justify-center gap-2">
       <h1>Inbox</h1>
     </div>
 
-    <div class="flex flex-row items-center gap-2">
+    <div class="flex flex-row items-center gap-2 justify-end">
       <div class="text-gray-500">Relevance to</div>
       <img :src="me.image" class="h-[1.5rem] w-[1.5rem] rounded-full" />
     </div>
@@ -28,4 +28,8 @@ const [me] = await Promise.all([
 </script>
 
 <style lang="postcss" scoped>
+.layout {
+  @apply px-12 py-8 w-full grid items-center;
+  grid-template-columns: 1fr 1fr 1fr;
+}
 </style>
