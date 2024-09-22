@@ -37,7 +37,8 @@ export const useOutreachStore = defineStore('outreach', {
       }
     },
     async createOutreach({ sender, body, companyType, snippet,
-                           recipient, linkedinUrl, calendarUrl }) {
+                           recipient, linkedinUrl, calendarUrl,
+                           companyName, companyLogoUrl }) {
       const { data } = await useApi('/v0.1/outreach', {
         method: 'POST',
         body: {
@@ -48,6 +49,8 @@ export const useOutreachStore = defineStore('outreach', {
           recipient,
           calendarUrl,
           linkedinUrl,
+          companyName,
+          companyLogoUrl,
         }
       })
       return data.value.uuid

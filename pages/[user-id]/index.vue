@@ -70,6 +70,22 @@
           class="w-5 h-5" />
         <div class="text-gray-600">Calendar Link</div>
         <UInput v-model="calendarUrl" class="max-w-[400px]" />
+
+        <UIcon name="i-heroicons-check-circle"
+          :class="companyName ? 'text-green-500' : 'text-gray-300'"
+          class="w-5 h-5" />
+        <div class="text-gray-600">Company Name</div>
+        <UInput v-model="companyName" class="max-w-[400px]" />
+
+        <UIcon name="i-heroicons-check-circle"
+          :class="companyLogoUrl ? 'text-green-500' : 'text-gray-300'"
+          class="w-5 h-5" />
+        <div class="text-gray-600">Company Logo Url</div>
+        <div class="flex flex-row items-center gap-2">
+          <UInput v-model="companyLogoUrl" class="w-full max-w-[400px]" />
+          <img v-if="companyLogoUrl" :src="companyLogoUrl" 
+            class="w-5 h-5" />
+        </div>
       </div>
 
       <div class="mt-4 text-gray-400 text-sm">
@@ -116,6 +132,8 @@ const snippet = ref()
 const body = ref()
 const linkedinUrl = ref()
 const calendarUrl = ref()
+const companyName = ref()
+const companyLogoUrl = ref()
 
 const submit = async () => {
   await outreachStore.createOutreach({ 
@@ -125,7 +143,9 @@ const submit = async () => {
     body,
     linkedinUrl,
     calendarUrl,
-    recipient: user.email
+    companyName,
+    companyLogoUrl,
+    recipient: user.email,
   })
 
   await navigateTo(`${route.params.userid}/success`)
