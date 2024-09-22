@@ -32,7 +32,7 @@
         What are you selling?
       </div>
 
-      <USelect class="mt-2 max-w-[400px]" :options />
+      <USelect v-model="companyType" class="mt-2 max-w-[400px]" :options />
     </div>
 
     <div>
@@ -51,18 +51,25 @@
     </div>
 
     <div>
+      <h2>Your info</h2>
       <div class="links">
         <UIcon name="i-heroicons-check-circle"
-          :class="linkedIn ? 'text-green-500' : 'text-gray-300'"
+          :class="sender ? 'text-green-500' : 'text-gray-300'"
           class="w-5 h-5" />
-        <div class="text-gray-600">LinkedIn Profile</div>
-        <UInput v-model="linkedIn" class="max-w-[400px]"/>
+        <div class="text-gray-600">Email</div>
+        <UInput v-model="sender" class="max-w-[400px]" />
 
         <UIcon name="i-heroicons-check-circle"
-          :class="calendar ? 'text-green-500' : 'text-gray-300'"
+          :class="linkedinUrl ? 'text-green-500' : 'text-gray-300'"
+          class="w-5 h-5" />
+        <div class="text-gray-600">LinkedIn Profile</div>
+        <UInput v-model="linkedinUrl" class="max-w-[400px]"/>
+
+        <UIcon name="i-heroicons-check-circle"
+          :class="calendarUrl ? 'text-green-500' : 'text-gray-300'"
           class="w-5 h-5" />
         <div class="text-gray-600">Calendar Link</div>
-        <UInput v-model="calendar" class="max-w-[400px]" />
+        <UInput v-model="calendarUrl" class="max-w-[400px]" />
       </div>
 
       <div class="mt-4 text-gray-400 text-sm">
@@ -71,7 +78,7 @@
     </div>
 
     <div>
-      <UButton @click="submit">Submit</UButton>
+      <UButton @click="submit" :disabled="!allowSubmit">Submit</UButton>
     </div>
   </div>
 
@@ -107,8 +114,8 @@ const sender = ref()
 const companyType = ref()
 const snippet = ref()
 const body = ref()
-const linkedIn = ref()
-const calendar = ref()
+const linkedinUrl = ref()
+const calendarUrl = ref()
 
 const submit = async () => {
   await outreachStore.createOutreach({ 
@@ -116,13 +123,18 @@ const submit = async () => {
     companyType,
     snippet,
     body,
-    linkedIn,
-    calendar,
+    linkedinUrl,
+    calendarUrl,
     recipient: user.email
   })
 
-  await navigateTo('/success')
+  await navigateTo(`${route.params.userid}/success`)
 }
+
+const allowSubmit = computed(() => 
+  snippet.value && companyType.value && body.value
+    && (sender.value || linkedinUrl.value || calendarUrl.value)
+)
 </script>
 
 <style lang="postcss" scoped>

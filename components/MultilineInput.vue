@@ -4,8 +4,8 @@
     rows="1"
     ref="textarea"
     class="p-0 border-0 rounded-none text-black resize-none outline-none"
-    placeholder="Header"
-    :readonly="readonly"
+    :placeholder
+    :readonly
     @blur="emit('update:modelValue', value)"
     @input="removeNewLines" />
 </template>
@@ -17,6 +17,7 @@ const { clone } = lodash_pkg;
 const props = defineProps({
   modelValue: { type: String },
   readonly: { type: Boolean, default: false },
+  placeholder: { type: String }
 })
 
 const emit = defineEmits(['update:modelValue'])

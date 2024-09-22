@@ -37,7 +37,7 @@ export const useOutreachStore = defineStore('outreach', {
       }
     },
     async createOutreach({ sender, body, companyType, snippet,
-                           recipient, linkedIn, calendar }) {
+                           recipient, linkedinUrl, calendarUrl }) {
       const { data } = await useApi('/v0.1/outreach', {
         method: 'POST',
         body: {
@@ -46,39 +46,11 @@ export const useOutreachStore = defineStore('outreach', {
           companyType,
           snippet,
           recipient,
-          calendar,
-          linkedIn,
+          calendarUrl,
+          linkedinUrl,
         }
       })
       return data.value.uuid
     },
-    // async updateCampaign({ uuid, title, columnsApproved, aiPromptsApproved, 
-    //   isPublished 
-    // }) {
-    //   const { apiFetch } = useNuxtApp()
-    //   const { data } = await apiFetch(`/v0.1/campaign/${uuid}`, { 
-    //     method: 'PATCH',
-    //     body: { 
-    //       title,
-    //       columnsApproved,
-    //       aiPromptsApproved,
-    //       isPublished,
-    //     }
-    //   })
-
-    //   const c = this.campaigns[uuid].content
-    //   if (data.value.title !== undefined) {
-    //     c.title = data.value.title
-    //   }
-    //   if (data.value.columnsApproved !== undefined) {
-    //     c.columnsApproved = data.value.columnsApproved
-    //   }
-    //   if (data.value.aiPromptsApproved !== undefined) {
-    //     c.aiPromptsApproved = data.value.aiPromptsApproved
-    //   }
-    //   if (data.value.isPublished !== undefined) {
-    //     c.isPublished = data.value.isPublished
-    //   }
-    // },
   }
 })
