@@ -21,6 +21,6 @@ echo "${GREEN}Step 4 Complete:${DEFAULT} Deploying Docker image
 
 Check AWS AppRunner (link below) to see the service deployment:
 
-${CYAN}${DEFAULT}
+${CYAN}https://us-east-2.console.aws.amazon.com/apprunner/home?region=us-east-2#/services/dashboard?service_arn=arn%3Aaws%3Aapprunner%3Aus-east-2%3A471112549420%3Aservice%2Frelevance-web-dev%2F1ca2a465fe5c485584030db9540fc72a&active_tab=logs${DEFAULT}
 
 "
