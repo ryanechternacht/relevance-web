@@ -1,24 +1,41 @@
 <template>
-  <div class="p-20">
-    <UFormGroup label="From">
-      <UInput v-model="outreach.sender" readonly />
-    </UFormGroup>
+  <div>
+    <TheTopNav>
+      <template #action-items>
+        <div>a button!</div>
+      </template>
+    </TheTopNav>
 
-    <UFormGroup label="Company Type">
-      <UInput v-model="outreach.companyType" readonly />
-    </UFormGroup>
+    <div class="max-w-[800px] mx-auto flex flex-col items-center gap-4">
+      <div class="flex flex-row gap-2 items-center">
+        <img v-if="outreach.companyLogoUrl"
+          :src="outreach.companyLogoUrl"
+          class="w-6 h-6 rounded-full" >
+          <h2>{{ outreach.companyName }}</h2>
+      </div>
 
-    <UFormGroup label="Snippet">
-      <UInput v-model="outreach.snippet" readonly />
-    </UFormGroup>
+      <h1>{{ outreach.snippet }}</h1>
 
-    <UFormGroup label="Body">
-      <UInput v-model="outreach.body" readonly />
-    </UFormGroup>
+      <div class="w-full flex flex-row items-center justify-between">
+        <div class="flex flex-row items-center gap-2">
+          <span v-if="outreach.sender" class="text-gray-500">Made by {{ outreach.sender }}</span>
+          <!-- TODO linkedin icon/url -->
+          <UButton v-if="outreach.calendarUrl" 
+            icon="i-heroicons-calendar"
+            variant="ghost"
+            :to="outreach.calendarUrl"
+            class="text-blue-500" />
+        </div>
 
-    <UFormGroup label="Sent On">
-      <UInput v-model="outreach.createdAt" readonly />
-    </UFormGroup>
+        <div class="text-gray-500">
+          {{ prettyFormatDate(outreach.createdAt) }}
+        </div>
+      </div>
+
+      <TipTapTextarea v-model="outreach.body"
+        :readonly
+        class="w-full border-none p-0" />
+    </div>
   </div>
 </template>
 
@@ -39,6 +56,10 @@ const [outreach] = await Promise.all([
   getOutreachByUuid.value(route.params.uuid),
 ])
 
+const dayjs = useDayjs()
+function prettyFormatDate(date) {
+  return dayjs(date).calendar()
+}
 </script>
 
 <style lang="postcss" scoped>

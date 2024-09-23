@@ -47,7 +47,7 @@
       </div>
 
       <TipTapTextarea v-model="body"
-        class="mt-2" />
+        class="mt-2 p-2 border border-gray-200 rounded-md" />
     </div>
 
     <div>
