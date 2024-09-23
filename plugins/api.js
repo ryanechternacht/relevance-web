@@ -1,7 +1,9 @@
 export default defineNuxtPlugin((nuxtApp) => {
+  const { apiBaseUrl } = useAppConfig()
+
   const api = $fetch.create({
     // TODO pull from config
-    baseURL: 'http://api.buyersphere-local.com/',
+    baseURL: apiBaseUrl,
     onRequest({ options }) {
       if (process.server) {
         const headers = useRequestHeaders(['cookie'])

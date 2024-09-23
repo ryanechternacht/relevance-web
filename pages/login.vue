@@ -15,9 +15,14 @@
 </template>
 
 <script setup>
-
 const showGoogleLogin = ref(true)
-const googleLoginLink = ref("https://test.stytch.com/v1/public/oauth/google/start?public_token=public-token-test-149e4c38-50fd-4eb3-9b34-0c2992e73a07")
+
+const { stytch } = useAppConfig()
+const googleLoginLink = computed(() => 
+  `${stytch.baseUrl}/v1/public/oauth/google/start` + 
+  `?public_token=${stytch.publicToken}` + 
+  `&login_redirect_url=${stytch.loginRedirectUri}` +
+  `&signup_redirect_url=${stytch.signupRedirectUri}`)
 </script>
 
 <style lang="postcss" scoped>
