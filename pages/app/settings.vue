@@ -5,8 +5,7 @@
       <div class="text-sm text-gray-400">{{ mailSyncStatusMap[me.mailSyncStatus].helperText }}</div>
     </div>
 
-    <!-- TODO pull from config -->
-    <UButton to="http://api.buyersphere-local.com/v0.1/gmail-approval">Sync Google Account</UButton>
+    <UButton :to="gmailSyncUrl">Sync Google Account</UButton>
   </div>
 </template>
 
@@ -17,6 +16,10 @@ import { storeToRefs } from 'pinia'
 definePageMeta({
   middleware: ['enforce-gmail-login'],
 })
+
+const { apiBaseUrl } = useAppConfig()
+
+const gmailSyncUrl = computed(() => `${apiBaseUrl}v0.1/gmail-approval`)
 
 const usersStore = useUsersStore()
 const { getMeCached } = storeToRefs(usersStore)
