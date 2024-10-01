@@ -55,5 +55,17 @@ export const useOutreachStore = defineStore('outreach', {
       })
       return data.value.uuid
     },
+    async updateOutreach({ uuid, status }) {
+      const { data } = await useApi(`/v0.1/outreach/${uuid}`, {
+        method: 'PATCH',
+        body: {
+          status,
+        }
+      })
+      const o = find(this.outreach?.content, o => o.uuid === uuid)
+      if (data.value.status !== undefined) {
+        o.status = data.value.status
+      }
+    }
   }
 })

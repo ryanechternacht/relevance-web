@@ -2,7 +2,6 @@
   <div>
     <TheTopNav>
       <template #action-items>
-        <div>a button!</div>
       </template>
     </TheTopNav>
 
@@ -11,7 +10,8 @@
         <img v-if="outreach.companyLogoUrl"
           :src="outreach.companyLogoUrl"
           class="w-6 h-6 rounded-full" >
-          <h2>{{ outreach.companyName }}</h2>
+          <h2 v-if="outreach.companyName">{{ outreach.companyName }}</h2>
+          <h2 v-else>{{ outreach.snippet }}</h2>
       </div>
 
       <h1>{{ outreach.snippet }}</h1>
@@ -19,12 +19,17 @@
       <div class="w-full flex flex-row items-center justify-between">
         <div class="flex flex-row items-center gap-2">
           <span v-if="outreach.sender" class="text-gray-500">Made by {{ outreach.sender }}</span>
-          <!-- TODO linkedin icon/url -->
-          <UButton v-if="outreach.calendarUrl" 
+          <UButton v-if="outreach.calendarUrl"
             icon="i-heroicons-calendar"
             variant="ghost"
             :to="outreach.calendarUrl"
             class="text-blue-500" />
+          <UButton v-if="outreach.linkedinUrl" 
+            variant="ghost"
+            :to="outreach.linkedinUrl"
+            class="text-blue-500">
+            <img src="/linkedin-logo.png" class="w-4 h-4">
+          </UButton>
         </div>
 
         <div class="text-gray-500">
@@ -35,6 +40,26 @@
       <TipTapTextarea v-model="outreach.body"
         :readonly
         class="w-full border-none p-0" />
+
+      <div class="w-full flex flex-row gap-4">
+        <!-- <UButton
+          @click="">
+          Reply
+        </UButton> -->
+        <UButton
+          variant="outline"
+          @click="star">
+          Star
+        </UButton>
+
+        <div class="flex-grow" />
+
+        <UButton
+          color="red"
+          @click="ignore">
+          Ignore
+        </UButton>
+      </div>
     </div>
   </div>
 </template>
@@ -59,6 +84,16 @@ const [outreach] = await Promise.all([
 const dayjs = useDayjs()
 function prettyFormatDate(date) {
   return dayjs(date).calendar()
+}
+
+async function star () {
+  await outreachStore.updateOutreach({ uuid: outreach.uuid, status: "starred"})
+  await navigateTo('/app/dashboard')
+}
+
+async function ignore () {
+  await outreachStore.updateOutreach({ uuid: outreach.uuid, status: "ignored"})
+  await navigateTo('/app/dashboard')
 }
 </script>
 
