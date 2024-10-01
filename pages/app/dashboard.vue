@@ -15,7 +15,7 @@
       </template>
     </TheTopNav>
 
-    <div class="px-12">
+    <div class="mx-12 p-4 border rounded-md border-gray-200 min-h-[calc(100vh-100px)]">
       <UTable :columns :rows="filteredRows" @select="goToOutreach">
         <template #createdAt-data="{ row }">
           {{ prettyFormatDate(row.createdAt) }}
