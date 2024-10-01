@@ -11,7 +11,6 @@
           :src="outreach.companyLogoUrl"
           class="w-6 h-6 rounded-full" >
           <h2 v-if="outreach.companyName">{{ outreach.companyName }}</h2>
-          <h2 v-else>{{ outreach.snippet }}</h2>
       </div>
 
       <h1>{{ outreach.snippet }}</h1>
@@ -42,20 +41,24 @@
         class="w-full border-none p-0" />
 
       <div class="w-full flex flex-row gap-4">
-        <!-- <UButton
-          @click="">
+        <UButton @click="reply">
           Reply
-        </UButton> -->
-        <UButton
-          variant="outline"
+        </UButton>
+        <UButton variant="outline"
           @click="star">
           Star
         </UButton>
 
         <div class="flex-grow" />
 
-        <UButton
-          color="red"
+        <UButton color="red"
+          variant="outline"
+          @click="markSpam">
+          Mark as Spam
+        </UButton>
+
+        <UButton color="red"
+          variant="outline"
           @click="ignore">
           Ignore
         </UButton>
@@ -86,6 +89,12 @@ function prettyFormatDate(date) {
   return dayjs(date).calendar()
 }
 
+async function reply () {
+  await outreachStore.replyToOutreach({ uuid: outreach.uuid })
+  await navigateTo('https://mail.google.com/mail/u/#drafts', 
+    { open: { target: "_blank" } })
+}
+
 async function star () {
   await outreachStore.updateOutreach({ uuid: outreach.uuid, status: "starred"})
   await navigateTo('/app/dashboard')
@@ -95,8 +104,12 @@ async function ignore () {
   await outreachStore.updateOutreach({ uuid: outreach.uuid, status: "ignored"})
   await navigateTo('/app/dashboard')
 }
+
+async function markSpam () {
+  await outreachStore.updateOutreach({ uuid: outreach.uuid, status: "spam"})
+  await navigateTo('/app/dashboard')
+}
 </script>
 
 <style lang="postcss" scoped>
-
 </style>

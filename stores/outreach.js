@@ -66,6 +66,11 @@ export const useOutreachStore = defineStore('outreach', {
       if (data.value.status !== undefined) {
         o.status = data.value.status
       }
+    },
+    async replyToOutreach({ uuid }) {
+      const { data } = await useApi(`/v0.1/outreach/${uuid}/reply`, {
+        method: 'POST'
+      })
     }
   }
 })
