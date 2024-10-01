@@ -90,9 +90,9 @@ const options = [{
 const statuses = ref([options[0], options[1]])
 
 const filteredRows = computed(() => {
-  const filterStatuses = map(statuses.value, s => s.id)
 
-  if (filterStatuses.length) {
+  if (statuses.value && statuses.value.length) {
+    const filterStatuses = map(statuses.value, s => s.id)
     return filter(rows, r => filterStatuses.includes(r.status))
   } else {
     return rows
