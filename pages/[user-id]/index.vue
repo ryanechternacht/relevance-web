@@ -32,7 +32,10 @@
         What are you selling?
       </div>
 
-      <USelect v-model="companyType" class="mt-2 max-w-[400px]" :options />
+      <USelect v-model="companyType" 
+        :options
+        placeholder="Company Type"
+        class="mt-2 max-w-[400px]" /> 
     </div>
 
     <div>
@@ -127,7 +130,7 @@ const options = [
 ]
 
 const sender = ref()
-const companyType = ref()
+const companyType = ref(null)
 const snippet = ref()
 const body = ref()
 const linkedinUrl = ref()

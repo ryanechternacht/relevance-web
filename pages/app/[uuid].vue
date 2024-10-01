@@ -26,6 +26,7 @@
           <UButton v-if="outreach.linkedinUrl" 
             variant="ghost"
             :to="outreach.linkedinUrl"
+            target="_blank"
             class="text-blue-500">
             <img src="/linkedin-logo.png" class="w-4 h-4">
           </UButton>
