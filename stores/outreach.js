@@ -12,8 +12,8 @@ export const useOutreachStore = defineStore('outreach', {
     outreach: {},
   }),
   getters: {
-    getOutreach: (state) => async () => {
-      await state.fetchOutreach()
+    getOutreach: (state, statuses) => async () => {
+      await state.fetchOutreach({ statuses })
       return state.outreach?.content
     },
     getOutreachByUuid: (state) => async (uuid) => {
@@ -22,7 +22,7 @@ export const useOutreachStore = defineStore('outreach', {
     }
   },
   actions: {
-    async fetchOutreach({ forceRefresh } = {}) {
+    async fetchOutreach({ forceRefresh, statuses } = {}) {
       const dayjs = useDayjs()
 
       if (!this.email?.content

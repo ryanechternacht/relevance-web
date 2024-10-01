@@ -2,24 +2,48 @@
   <div>
     <TheTopNav>
       <template #action-items>
-        <div>a button!</div>
+        <USelectMenu v-model="statuses"
+          :options
+          multiple
+          icon="i-heroicons-funnel"
+          class="w-[8rem]">
+          <template #label>
+            <span v-if="statuses.length" class="truncate">{{ map(statuses, s => s.label).join(', ') }}</span>
+            <span class="text-gray-500 italic" v-else>Filter</span>
+          </template>
+        </USelectMenu>
       </template>
     </TheTopNav>
 
     <div class="px-12">
-      <UTable :columns :rows @select="goToOutreach">
+      <UTable :columns :rows="filteredRows" @select="goToOutreach">
         <template #createdAt-data="{ row }">
           {{ prettyFormatDate(row.createdAt) }}
         </template>
 
+        <template #star-data="{ row }">
+          <div class="w-[16px]">
+            <div class="star flex flex-row items-center">
+              <UIcon v-if="row.status === 'starred'"
+                name="i-heroicons-star-solid"
+                variant="fill"
+                class="w-[1rem] text-blue-500" />
+            </div>
+          </div>
+        </template>
+
         <template #row-buttons-data="{ row }">
-          <div class="w-[28px] h-[29px]">
-            <div class="row-buttons">
+          <div class="w-[60px] h-[29px]">
+            <div class="row-buttons flex-row items-center gap-2">
+              <UButton icon="i-heroicons-star"
+                variant="soft"
+                size="xs"
+                @click.stop="star(row)" />
               <UButton icon="i-heroicons-archive-box"
                 variant="soft"
                 color="red"
                 size="xs"
-                @click.stop="click" />
+                @click.stop="ignore(row)" />
             </div>
           </div>
         </template>
@@ -31,6 +55,8 @@
 <script setup>
 import { useOutreachStore } from '@/stores/outreach'
 import { storeToRefs } from 'pinia'
+import lodash_pkg from 'lodash';
+const { map, filter } = lodash_pkg;
 
 definePageMeta({
   middleware: ['enforce-gmail-login'],
@@ -48,11 +74,43 @@ const [rows] = await Promise.all([
   getOutreach.value(),
 ])
 
-function click() {
-  console.log('click')
+const options = [{
+  id: 'new',
+  label: 'New',
+}, {
+  id: 'starred',
+  label: 'Starred',
+}, {
+  id: 'ignored',
+  label: 'Ignored',
+}, {
+  id: 'spam',
+  label: 'Spam',
+}]
+const statuses = ref([options[0], options[1]])
+
+const filteredRows = computed(() => {
+  const filterStatuses = map(statuses.value, s => s.id)
+
+  if (filterStatuses.length) {
+    return filter(rows, r => filterStatuses.includes(r.status))
+  } else {
+    return rows
+  }
+})
+
+async function star (outreach) {
+  await outreachStore.updateOutreach({ uuid: outreach.uuid, status: "starred"})
+}
+
+async function ignore (outreach) {
+  await outreachStore.updateOutreach({ uuid: outreach.uuid, status: "ignored"})
 }
 
 const columns = [{
+  label: '',
+  key: 'star',
+}, {
   label: 'From',
   key: 'sender',
   sortable: true,
@@ -83,10 +141,14 @@ async function goToOutreach(o) {
 }
 
 tr:hover .row-buttons {
-  @apply block
+  @apply flex
 }
 
 :deep() td:has(.row-buttons) {
   width: 28px;
+}
+
+:deep() td:has(.star) {
+  width: 1rem;
 }
 </style>
