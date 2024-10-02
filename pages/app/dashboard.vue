@@ -28,6 +28,9 @@
                 name="i-heroicons-star-solid"
                 variant="fill"
                 class="w-[1rem] text-blue-500" />
+              <UIcon v-else-if="row.status === 'replied'"
+                name="i-heroicons-arrow-uturn-left"
+                class="w-[1rem] text-blue-500" />
             </div>
           </div>
         </template>
@@ -86,6 +89,9 @@ const options = [{
 }, {
   id: 'spam',
   label: 'Spam',
+}, {
+  id: 'replied',
+  label: 'Replied',
 }]
 const statuses = ref([options[0], options[1]])
 

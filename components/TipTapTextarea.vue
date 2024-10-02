@@ -6,7 +6,7 @@
        to the .ProseMirror -->
   <editor-content 
     :editor="editor"
-    class="editor body"
+    class="editor body h-full"
     :class="[isDemo ? 'bg-gray-100' : 'bg-white']" />
 </template>
 
@@ -68,6 +68,10 @@ defineExpose({ focus })
 
   li p {
     display: inline;
+  }
+
+  blockquote {
+    @apply pl-[.4rem] border-l-[2px] border-l-gray-300;
   }
 
   .ProseMirror p.is-editor-empty:first-child::before {

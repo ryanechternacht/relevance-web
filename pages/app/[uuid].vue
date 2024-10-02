@@ -17,7 +17,7 @@
         <div class="flex flex-row gap-2 items-center">
           <img v-if="outreach.companyLogoUrl"
             :src="outreach.companyLogoUrl"
-            class="w-6 h-6 rounded-full" >
+            class="w-6 h-6 rounded-full">
             <h2 v-if="outreach.companyName">{{ outreach.companyName }}</h2>
         </div>
 
@@ -50,9 +50,10 @@
           class="w-full border-none p-0" />
 
         <div class="w-full flex flex-row gap-4">
-          <UButton @click="reply">
+          <UButton @click="reply = true">
             Reply
           </UButton>
+
           <UButton variant="outline"
             @click="star">
             Star
@@ -71,6 +72,24 @@
             @click="ignore">
             Ignore
           </UButton>
+        </div>
+        
+        <div v-show="reply" class="w-full">
+          <TipTapTextarea v-model="replyText"
+            min-height="8rem"
+            class="mt-2 p-2 border border-gray-200 rounded-md" />
+
+          <div class="mt-2 flex flex-row justify-between items-center">
+            <div class="italic text-gray-500 text-sm">
+              This reply will be sent from your email to the sender. <br>
+              You can find a copy of it in your sent mail.
+            </div>
+
+            <UButton 
+              @click="sendReply">
+              Send Reply
+            </UButton>
+          </div>
         </div>
       </div>
     </div>
@@ -99,10 +118,12 @@ function prettyFormatDate(date) {
   return dayjs(date).calendar()
 }
 
-async function reply () {
-  await outreachStore.replyToOutreach({ uuid: outreach.uuid })
-  await navigateTo('https://mail.google.com/mail/u/#drafts', 
-    { open: { target: "_blank" } })
+const reply = ref(false)
+const replyText = ref()
+
+async function sendReply () {
+  await outreachStore.replyToOutreach({ uuid: outreach.uuid, message: replyText })
+  await navigateTo('/app/dashboard')
 }
 
 async function star () {
