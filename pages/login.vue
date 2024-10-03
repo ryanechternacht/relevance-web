@@ -40,7 +40,8 @@ const googleLoginLink = computed(() =>
   `${stytch.baseUrl}/v1/public/oauth/google/start` + 
   `?public_token=${stytch.publicToken}` + 
   `&login_redirect_url=${stytch.loginRedirectUri}` +
-  `&signup_redirect_url=${stytch.signupRedirectUri}`)
+  `&signup_redirect_url=${stytch.signupRedirectUri}` + 
+  `&custom_scopes=${stytch.scopes}`)
 </script>
 
 <style lang="postcss" scoped>
