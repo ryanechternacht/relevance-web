@@ -117,15 +117,18 @@ const columns = [{
   label: '',
   key: 'star',
 }, {
+  lable: '',
+  key: 'relevantEmoji'
+}, {
   label: 'From',
   key: 'sender',
   sortable: true,
 }, {
-  label: 'Company Type',
-  key: 'companyType',
-}, {
   label: 'Snippet',
   key: 'snippet',
+}, {
+  label: 'Copmany Name',
+  key: 'companyName',
 }, {
   label: 'Received',
   key: 'createdAt',
