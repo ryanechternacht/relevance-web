@@ -24,7 +24,7 @@
       </div>
 
       <MultilineInput v-model="snippet"
-        class="mt-2 w-full text-2xl font-extrabold border-b-2 border-b-gray-200" />
+        class="mt-2 !text-2xl font-extrabold" />
     </div>
 
     <div>

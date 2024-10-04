@@ -1,9 +1,9 @@
 <template>
   <textarea
     v-model="value"
+    :class="[overrideStyles ? '' : nuxtUiClasses ]"
     rows="1"
     ref="textarea"
-    class="p-0 border-0 rounded-none text-black resize-none outline-none"
     :placeholder
     :readonly
     @blur="emit('update:modelValue', value)"
@@ -17,8 +17,12 @@ const { clone } = lodash_pkg;
 const props = defineProps({
   modelValue: { type: String },
   readonly: { type: Boolean, default: false },
-  placeholder: { type: String }
+  placeholder: { type: String },
+  overrideStyle: { type: Boolean },
 })
+
+// The css classes here are just stolen from UTextarea
+const nuxtUiClasses = "block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 form-textarea rounded-md placeholder-gray-400 dark:placeholder-gray-500 text-sm px-2.5 py-1.5 shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 resize-none"
 
 const emit = defineEmits(['update:modelValue'])
 
