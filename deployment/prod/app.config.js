@@ -14,4 +14,5 @@ export default defineAppConfig({
     domain: '.relevance.to'
   },
   apiBaseUrl: 'https://api.relevance.to/',
+  frontendBaseUrl: 'https://app.relevance.to/',
 })

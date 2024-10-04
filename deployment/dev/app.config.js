@@ -14,4 +14,5 @@ export default defineAppConfig({
     domain: '.swaypage.io'
   },
   apiBaseUrl: 'https://api.swaypage.io/',
+  frontendBaseUrl: 'http://app.swaypage.io/',
 })

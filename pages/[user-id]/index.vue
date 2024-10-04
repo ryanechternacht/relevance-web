@@ -1,17 +1,38 @@
 <template>
-  <div class="header-bar">
-    <div>
-      <div class="text-gray-500 text-sm">Made with <span class="font-bold">Relevance</span></div>
+  <ThePublicTopNav :user 
+    :back="page === 'submit'"
+    @back="page = 'relevancy'" />
+
+  <div v-if="page === 'relevancy'"
+    class="flex flex-col items-center max-w-[28rem] gap-8 text-center mx-auto">
+    <img :src="user.image"
+      class="w-8 h-8 rounded-full">
+
+    <h1>What's Relevant {{ user.firstName }}:</h1>
+
+    <div class="flex flex-col gap-4 items-center w-full">
+      <UButton v-for="r in user.relevancies"
+        variant="outline"
+        class="px-8 flex flex-row items-center w-full min-h-12 gap-2"
+        @click="startOutreach(r)">
+        <div class="text-gray-800">{{ r.emoji }}</div>
+        <div class="text-gray-800">{{ r.description }}</div>
+      </UButton>
     </div>
 
-    <div class="w-full flex flex-row items-center justify-center gap-4">
-      <img :src="user.image" class="h-[1.5rem] w-[1.5rem] rounded-full">
-      <h1>Talk to {{ user.firstName }}</h1>
-    </div>
+    <div class="border-b max-w-[19rem] border-gray-900 w-full" />
 
-    <div><!-- intentionally blank --></div>
+    <h2 class="-mb-4">Otherwise:</h2>
+
+    <UButton variant="outline"
+      class="px-8 flex flex-row items-center w-full min-h-12"
+      @click="startOutreach(null)">
+      <span class="text-gray-800 ml-[1.375rem]">Share how you're relevant to me</span>
+    </UButton>
   </div>
-  <div class="px-12 flex flex-col gap-6">
+
+  <div v-else-if="page === 'submit'"
+    class="px-12 flex flex-col gap-6">
     <div>
       <div class="w-full flex flex-row justify-between">
         <div class="text-gray-600">
@@ -105,9 +126,9 @@
 </template>
 
 <script setup>
-import { useOutreachStore } from '@/stores/outreach'
 import { useUsersStore } from '@/stores/users'
 import { storeToRefs } from 'pinia'
+import { useOutreachStore } from '@/stores/outreach'
 
 const outreachStore = useOutreachStore()
 
@@ -118,6 +139,19 @@ const route = useRoute()
 const [user] = await Promise.all([
   getUserByShortcode.value(route.params.userid)
 ])
+
+const page = ref(user.relevancies && user.relevancies.length
+  ? "relevancy"
+  : "submit"
+)
+const relevance = ref()
+
+async function startOutreach(r) {
+  if (r) {
+    relevance.value = r
+  }
+  page.value = 'submit'
+}
 
 const options = [
   {
@@ -161,11 +195,6 @@ const allowSubmit = computed(() =>
 </script>
 
 <style lang="postcss" scoped>
-.header-bar {
-  @apply w-full px-12 py-8 grid items-center;
-  grid-template-columns: 1fr 1fr 1fr;
-}
-
 .links {
   @apply grid items-center gap-x-4 gap-y-4;
   grid-template-columns: auto auto 1fr;

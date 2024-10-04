@@ -14,4 +14,5 @@ export default defineAppConfig({
     domain: '.buyersphere-local.com'
   },
   apiBaseUrl: 'http://api.buyersphere-local.com/',
+  frontendBaseUrl: 'http://app.buyersphere-local.com/',
 })
