@@ -34,6 +34,17 @@ export const useUsersStore = defineStore('users', {
         const { data } = await useApi(`/v0.1/users/shortcode/${shortcode}`)
         this.users[shortcode] = data.value
       }
+    },
+    async updateUser ({ relevancies }) {
+      const { data } = await useApi(`/v0.1/users/me`, {
+        method: 'PATCH',
+        body: {
+          relevancies
+        }
+      })
+      if (data.value.relevancies !== undefined) {
+        this.me.relevancies = data.value.relevancies
+      }
     }
   },
 })

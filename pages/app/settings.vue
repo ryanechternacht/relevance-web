@@ -14,26 +14,54 @@
 
     <div class="mx-12 p-4 border rounded-md border-gray-200 min-h-[calc(100vh-100px)]">
       <div>
-        <h2>What's Relevant to Me?</h2>
-        <div class="relevancies-grid">
-          <template v-for="(r, i) in relevancies">
-            <UIcon name="i-heroicons-bars-3" />
-            <UInput v-model="r.emoji" />
+        <h2 class="mb-2">What's Relevant to Me?</h2>
+        
+        <VueDraggable
+          v-model="relevancies"
+          ghost-class="ghost"
+          :animation="200"
+          :scroll="false"
+          group="relevancies"
+          handle=".drag-handle"
+        >
+          <div v-for="(r, i) in relevancies"
+            :key="i"
+            class="mt-2 flex flex-row items-center gap-2">
+            <UIcon name="i-heroicons-bars-3" class="drag-handle" />
+            <!-- <UInput v-model="r.emoji" /> -->
+            <UPopover v-model:open="r.open" 
+              :popper="{ placement: 'bottom-start' }">
+              <UButton color="white">
+                {{ r.emoji }}
+              </UButton>
+
+              <template #panel>
+                <NuxtEmojiPicker :native="true"
+                  disable-skin-tones
+                  @select="(e) => onSelectEmoji(e, i)" />
+              </template>
+            </UPopover>
             <MultilineInput v-model="r.description"
-              override-style
-              class="" />
+              @update:model-value="debounceRelevanciesUpdate" />
             <UButton icon="i-heroicons-trash"
-              variant="outline"
+              size="sm"
+              variant="ghost"
               @click="removeRow(i)" />
-          </template>
-          <div class="col-span-3">
-            <UButton
-              variant="outline"
-              @click="addCategory">
-              Add Category
-            </UButton>
           </div>
-        </div>
+        </VueDraggable>
+        <UButton class="mt-2"
+          variant="outline"
+          @click="addCategory">
+          Add Category
+        </UButton>
+
+        <!-- TODO set public link on this page -->
+
+        <!-- TODO get public page link somewhere on site -->
+
+        <!-- TODO remind ppl install the chrome extension -->
+        
+        <!-- TODO preview public page button -->
       </div>
     </div>
   </div>
@@ -42,6 +70,9 @@
 <script setup>
 import { useUsersStore } from '@/stores/users'
 import { storeToRefs } from 'pinia'
+import { VueDraggable } from 'vue-draggable-plus'
+import lodash_pkg from 'lodash';
+const { cloneDeep, debounce } = lodash_pkg;
 
 definePageMeta({
   middleware: ['enforce-gmail-login'],
@@ -56,32 +87,45 @@ const [me] = await Promise.all([
   getMeCached.value()
 ])
 
-const relevancies = ref([{
-  emoji: "🍕",
-  description: "Partners looking to explore integrations",
-  ordering: 0,
-}, {
-  emoji: "🍔",
-  description: "People looking to help the AKC Rescure",
-  ordering: 1,
-}])
+const relevancies = ref(cloneDeep(me.relevancies))
 
 function removeRow(i) {
   relevancies.value.splice(i, 1)
+  debounceRelevanciesUpdate()
 }
 
 function addCategory() {
   relevancies.value.push({
-    emoji: "",
+    emoji: "🍕",
     description: "",
-    ordering: relevancies.value.count,
   })
 }
+
+function onSelectEmoji (newEmoji, i) {
+  relevancies.value[i].emoji = newEmoji.i
+  relevancies.value[i].open = false
+  debounceRelevanciesUpdate()
+}
+
+async function saveRelevancies() {
+  console.log('save')
+  await usersStore.updateUser({ relevancies })
+}
+
+const debounceRelevanciesUpdate = debounce(saveRelevancies, 3000, { leading: false, trailing: true })
+watch(relevancies, () => {
+  debounceRelevanciesUpdate()
+})
+
+const router = useRouter()
+router.beforeEach(async () => {
+  await debounceRelevanciesUpdate.flush()
+})
 </script>
 
 <style lang="postcss" scoped>
 .relevancies-grid {
-  @apply grid gap-x-4 gap-y-2 items-center;
+  @apply grid gap-x-4 gap-y-2 items-center max-w-[600px];
   grid-template-columns: auto auto 1fr auto;
 }
 </style>

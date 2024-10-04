@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'dayjs-nuxt',
     '@nuxt/ui',
+    'nuxt-emoji-picker',
   ],
 
   dayjs: {

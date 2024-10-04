@@ -1,7 +1,7 @@
 <template>
   <textarea
     v-model="value"
-    :class="[overrideStyles ? '' : nuxtUiClasses ]"
+    :class="[overrideStyle ? '' : nuxtUiClasses ]"
     rows="1"
     ref="textarea"
     :placeholder
