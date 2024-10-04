@@ -1,14 +1,14 @@
 <template>
   <ThePublicTopNav :user 
-    :back="page === 'submit'"
-    @back="page = 'relevancy'" />
+    :back="hasRelevancies && page === 'submit'"
+    @back="page = 'relevance'" />
 
-  <div v-if="page === 'relevancy'"
-    class="flex flex-col items-center max-w-[28rem] gap-8 text-center mx-auto">
+  <div v-if="page === 'relevance'"
+    class="flex flex-col items-center max-w-[28rem] gap-8 mx-auto">
     <img :src="user.image"
       class="w-8 h-8 rounded-full">
 
-    <h1>What's Relevant {{ user.firstName }}:</h1>
+    <h1 class="text-center">What's Relevant {{ user.firstName }}:</h1>
 
     <div class="flex flex-col gap-4 items-center w-full">
       <UButton v-for="r in user.relevancies"
@@ -32,57 +32,43 @@
   </div>
 
   <div v-else-if="page === 'submit'"
-    class="px-12 flex flex-col gap-6">
-    <div>
-      <div class="w-full flex flex-row justify-between">
-        <div class="text-gray-600">
-          Why is your solution relevant to me?
-        </div>
+    class="flex flex-col items-center max-w-[28rem] gap-8 mx-auto">
+    <img :src="user.image"
+      class="w-8 h-8 rounded-full">
 
-        <div class="text-gray-400">
-          &lt;50 characters
-        </div>
+    <h1 v-if="relevancy.description"
+      class="text-center">{{ relevancy.emoji }} {{ relevancy.description }}</h1>
+    <h1 v-else
+      class="text-center">What are you reaching out about?</h1>
+
+    <div class="w-full">
+      <div class="px-4 flex flex-row items-center justify-between mb-2">
+        <div class="text-sm">Your Email</div>
       </div>
-
-      <MultilineInput v-model="snippet"
-        class="mt-2 !text-2xl font-extrabold" />
+      <UInput v-model="sender"
+        class="w-full" />
     </div>
 
-    <div>
-      <div class="text-gray-600">
-        What are you selling?
+    <div class="w-full">
+      <div class="px-4 flex flex-row items-center justify-between mb-2">
+        <div class="text-sm">Why is your solution relevant to me?</div>
+        <div class="text-gray-400 text-sm">&lt;50 characters</div>
       </div>
-
-      <USelect v-model="companyType" 
-        :options
-        placeholder="Company Type"
-        class="mt-2 max-w-[400px]" /> 
+      <UInput v-model="snippet"
+        class="w-full" />
     </div>
 
-    <div>
-      <div class="w-full flex flex-row justify-between">
-        <div class="text-gray-600">
-          Share how you add value with a relevant example:
-        </div>
-
-        <div class="text-gray-400">
-          &lt;1,000 characters
-        </div>
+    <div class="w-full">
+      <div class="px-4 flex flex-row items-center justify-between mb-2">
+        <div class="text-sm">Share how you add value with an example:</div>
+        <div class="text-gray-400 text-sm">&lt;500 characters</div>
       </div>
-
       <TipTapTextarea v-model="body"
-        class="mt-2 p-2 border border-gray-200 rounded-md" />
+        class="w-full block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 form-textarea rounded-md placeholder-gray-400 dark:placeholder-gray-500 text-sm px-2.5 py-1.5 shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 resize-none" />
     </div>
 
-    <div>
-      <h2>Your info</h2>
+    <div class="w-full">
       <div class="links">
-        <UIcon name="i-heroicons-check-circle"
-          :class="sender ? 'text-green-500' : 'text-gray-300'"
-          class="w-5 h-5" />
-        <div class="text-gray-600">Email</div>
-        <UInput v-model="sender" class="max-w-[400px]" />
-
         <UIcon name="i-heroicons-check-circle"
           :class="linkedinUrl ? 'text-green-500' : 'text-gray-300'"
           class="w-5 h-5" />
@@ -140,16 +126,13 @@ const [user] = await Promise.all([
   getUserByShortcode.value(route.params.userid)
 ])
 
-const page = ref(user.relevancies && user.relevancies.length
-  ? "relevancy"
-  : "submit"
-)
-const relevance = ref()
+const hasRelevancies = user.relevancies && user.relevancies.length
+
+const page = ref(hasRelevancies ? "relevance" : "submit")
+const relevancy = ref({})
 
 async function startOutreach(r) {
-  if (r) {
-    relevance.value = r
-  }
+  relevancy.value = r ?? {}
   page.value = 'submit'
 }
 
@@ -164,7 +147,6 @@ const options = [
 ]
 
 const sender = ref()
-const companyType = ref(null)
 const snippet = ref()
 const body = ref()
 const linkedinUrl = ref()
@@ -175,13 +157,14 @@ const companyLogoUrl = ref()
 const submit = async () => {
   await outreachStore.createOutreach({ 
     sender,
-    companyType,
     snippet,
     body,
     linkedinUrl,
     calendarUrl,
     companyName,
     companyLogoUrl,
+    relevantEmoji: relevancy.value.emoji,
+    relevantDescription: relevancy.value.description,
     recipient: user.email,
   })
 
@@ -189,14 +172,12 @@ const submit = async () => {
 }
 
 const allowSubmit = computed(() => 
-  snippet.value && companyType.value && body.value
-    && (sender.value || linkedinUrl.value || calendarUrl.value)
-)
+  sender.value && snippet.value && body.value)
 </script>
 
 <style lang="postcss" scoped>
 .links {
-  @apply grid items-center gap-x-4 gap-y-4;
+  @apply w-full grid items-center gap-x-4 gap-y-4;
   grid-template-columns: auto auto 1fr;
 }
 </style>

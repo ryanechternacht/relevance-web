@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import lodash_pkg from 'lodash'
-const { find, remove } = lodash_pkg
+const { find } = lodash_pkg
 
 function is10MinutesOld(jsonTimestamp) {
   const dayjs = useDayjs()
@@ -36,21 +36,22 @@ export const useOutreachStore = defineStore('outreach', {
         }
       }
     },
-    async createOutreach({ sender, body, companyType, snippet,
-                           recipient, linkedinUrl, calendarUrl,
-                           companyName, companyLogoUrl }) {
+    async createOutreach({ sender, body, snippet, recipient, linkedinUrl,
+      calendarUrl, companyName, companyLogoUrl,
+      relevantEmoji, relevantDescription }) {
       const { data } = await useApi('/v0.1/outreach', {
         method: 'POST',
         body: {
           body,
           sender,
-          companyType,
           snippet,
           recipient,
           calendarUrl,
           linkedinUrl,
           companyName,
           companyLogoUrl,
+          relevantEmoji,
+          relevantDescription,
         }
       })
       return data.value.uuid
