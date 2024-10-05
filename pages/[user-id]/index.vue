@@ -8,7 +8,7 @@
     <img :src="user.image"
       class="w-8 h-8 rounded-full">
 
-    <h1 class="text-center">What's Relevant {{ user.firstName }}:</h1>
+    <h1 class="text-center">What's relevant to {{ user.firstName }}:</h1>
 
     <div class="flex flex-col gap-4 items-center w-full">
       <UButton v-for="r in user.relevancies"
