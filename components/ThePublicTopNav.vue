@@ -25,7 +25,6 @@ const props = defineProps({
 })
 
 const { frontendBaseUrl } = useAppConfig()
-
 const publicLink = computed(() => `${frontendBaseUrl}${props.user.publicLink}`)
 
 const emit = defineEmits(['back'])

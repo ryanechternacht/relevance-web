@@ -1,22 +1,25 @@
 <template>
   <div>
-    <TheTopNav>
-      <template #action-items>
+    <TheTopNav />
+
+    <div class="mx-[8rem] px-8 py-4 border rounded-md border-gray-200 min-h-[calc(100vh-100px)]">
+      <div class="w-full flex flex-row justify-end">
         <USelectMenu v-model="statuses"
           :options
           multiple
           icon="i-heroicons-funnel"
-          class="w-[8rem]">
+          class="w-[12rem]">
           <template #label>
             <span v-if="statuses.length" class="truncate">{{ map(statuses, s => s.label).join(', ') }}</span>
             <span class="text-gray-500 italic" v-else>Filter</span>
           </template>
         </USelectMenu>
-      </template>
-    </TheTopNav>
+      </div>
 
-    <div class="mx-12 p-4 border rounded-md border-gray-200 min-h-[calc(100vh-100px)]">
-      <UTable :columns :rows="filteredRows" @select="goToOutreach">
+      <UTable :columns 
+        :rows="filteredRows"
+        :empty-state="{ icon: 'i-heroicons-inbox', label: 'No new outreach.' }"
+        @select="goToOutreach">
         <template #createdAt-data="{ row }">
           {{ prettyFormatDate(row.createdAt) }}
         </template>

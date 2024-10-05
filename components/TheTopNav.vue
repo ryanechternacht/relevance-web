@@ -1,18 +1,29 @@
 <template>
   <div class="layout">
-    <slot name="action-items">
-      <div></div>
-    </slot>
-
-    <div class="w-full flex flex-row items-center justify-center gap-2">
-      <h1>{{ header }}</h1>
+    <div class="flex flex-row items-center gap-2">
+      <UButton v-if="back"
+        variant="ghost"
+        @click="emit('back')">
+        <img class="w-1.125rem] h-[1.125rem]" src="/logo-back.svg">
+      </UButton>
+      <div v-else class="py-[.375rem] px-[.625rem]">
+        <img class="w-1.125rem] h-[1.125rem]" src="/logo.svg" />
+      </div>
+      <!-- <span class="uppercase text-gray-900">relevance.to/{{ me.publicLink }}</span> -->
     </div>
 
-    <div class="flex flex-row items-center gap-4 justify-end">
+    <div class="w-full flex flex-row items-center justify-center gap-2">
+      <!-- TODO when we start autoblocking, track that here -->
+      <!-- <div class="text-gray-400">TODO how many have we blocked</div> -->
+    </div>
+
+    <div class="flex flex-row items-center gap-2 justify-end">
+      <!-- TODO dropdown to do either message or link -->
       <UButton to="/app/settings"
         icon="i-heroicons-cog-6-tooth"
         variant="ghost" />
-      <div class="text-gray-500 -mr-2">Relevance to</div>
+      <CopyToClipboardButton
+        :clipboardText="publicLink" />
       <img :src="me.image" class="h-[1.5rem] w-[1.5rem] rounded-full" />
     </div>
   </div>
@@ -23,7 +34,8 @@ import { useUsersStore } from '@/stores/users';
 import { storeToRefs } from 'pinia'
 
 const props = defineProps({
-  header: { type: String, default: "Inbox" }
+  header: { type: String, default: "Inbox" },
+  back: { type: Boolean, default: false },
 })
 
 const usersStore = useUsersStore()
@@ -32,11 +44,16 @@ const { getMeCached } = storeToRefs(usersStore)
 const [me] = await Promise.all([
   getMeCached.value(),
 ])
+
+const { frontendBaseUrl } = useAppConfig()
+const publicLink = computed(() => `${frontendBaseUrl}${me.publicLink}`)
+
+const emit = defineEmits(['back'])
 </script>
 
 <style lang="postcss" scoped>
 .layout {
-  @apply px-12 py-8 w-full grid items-center;
+  @apply px-[8rem] pt-12 pb-4 w-full grid items-center;
   grid-template-columns: 1fr 1fr 1fr;
 }
 </style>
