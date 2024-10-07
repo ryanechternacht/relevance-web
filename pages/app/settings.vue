@@ -12,7 +12,7 @@
       </template>
     </TheTopNav>
 
-    <div class="mx-12 p-4 border rounded-md border-gray-200 min-h-[calc(100vh-100px)]">
+    <div class="page">
       <div>
         <h2 class="mb-2">What's Relevant to Me?</h2>
         
@@ -24,7 +24,13 @@
           group="relevancies"
           handle=".drag-handle"
         >
-          <div v-for="(r, i) in relevancies"
+          <div v-if="!relevancies.length"
+            class="text-gray-400 italic">
+            Make it clear what's relevant to you, so when people reach out,
+            they can make sure to align with your goals. 
+          </div>
+
+          <div v-else v-for="(r, i) in relevancies"
             :key="i"
             class="mt-2 flex flex-row items-center gap-2">
             <UIcon name="i-heroicons-bars-3" class="drag-handle" />
@@ -54,15 +60,38 @@
           @click="addCategory">
           Add Category
         </UButton>
-
-        <!-- TODO set public link on this page -->
-
-        <!-- TODO get public page link somewhere on site -->
-
-        <!-- TODO remind ppl install the chrome extension -->
-        
-        <!-- TODO preview public page button -->
       </div>
+
+      <div class="divider" />
+
+      <div>
+        <h2 class="mb-2">Public Link</h2>
+
+        <div class="flex flex-row items-start gap-4">
+          <UFormGroup
+            :error="saveFailed && 'This is already taken by another user, try another option'">
+            <UInput v-model="publicLink"
+            class="w-[24em]"
+            @update:model-value="showSaveButton = true" />
+          </UFormGroup>
+          <UButton v-if="showSaveButton"
+            @click="savePublicLink">
+            Save
+          </UButton>
+        </div>
+
+        <div class="text-sm text-gray-400 italic">
+          Changing this will cause existing links to break. If you change this, please update your LinkedIn or wherever you post this link
+        </div>
+      </div>
+
+      <!-- TODO set public link on this page -->
+
+      <!-- TODO remind ppl install the chrome extension -->
+      
+      <!-- TODO preview public page button -->
+
+      <!-- TODO Fix google login with a re-auth button -->
     </div>
   </div>
 </template>
@@ -108,7 +137,6 @@ function onSelectEmoji (newEmoji, i) {
 }
 
 async function saveRelevancies() {
-  console.log('save')
   await usersStore.updateUser({ relevancies })
 }
 
@@ -121,9 +149,32 @@ const router = useRouter()
 router.beforeEach(async () => {
   await debounceRelevanciesUpdate.flush()
 })
+
+const publicLink = ref(me.publicLink)
+const saveFailed = ref(false)
+const showSaveButton = ref(false)
+async function savePublicLink () {
+  if (await usersStore.updatePublicLink({ publicLink })) {
+    showSaveButton.value = false;
+    saveFailed.value = false
+  } else {
+    saveFailed.value = true
+  }
+}
 </script>
 
 <style lang="postcss" scoped>
+.page {
+  @apply mx-[8rem] px-16 py-8 border rounded-md border-gray-200 min-h-[calc(100vh-100px)]
+    flex flex-col gap-8;
+
+  /* this should probably be done with psuedo elements, but ain't nobody got time for that */
+  .divider {
+    @apply w-[80%] mx-auto border-b border-gray-200;
+  }
+}
+
+
 .relevancies-grid {
   @apply grid gap-x-4 gap-y-2 items-center max-w-[600px];
   grid-template-columns: auto auto 1fr auto;

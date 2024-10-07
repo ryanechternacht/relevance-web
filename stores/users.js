@@ -45,6 +45,20 @@ export const useUsersStore = defineStore('users', {
       if (data.value.relevancies !== undefined) {
         this.me.relevancies = data.value.relevancies
       }
+    },
+    async updatePublicLink ({ publicLink }) {
+      const { data, error } = await useApi(`/v0.1/users/me/public-link`, {
+        method: 'PATCH',
+        body: {
+          publicLink
+        }
+      })
+      if (error.value) {
+        return false
+      } else {
+        this.me.publicLink = data.value.publicLink
+        return true
+      }
     }
   },
 })

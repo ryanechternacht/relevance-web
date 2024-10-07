@@ -1,4 +1,3 @@
-// TODO should this be a composable instead?
 import lodash_pkg from 'lodash';
 const { camelCase, transform, isArray, isObject } = lodash_pkg;
 

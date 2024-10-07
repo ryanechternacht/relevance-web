@@ -14,7 +14,7 @@
 
     <div class="w-full flex flex-row items-center justify-center gap-2">
       <!-- TODO when we start autoblocking, track that here -->
-      <!-- <div class="text-gray-400">TODO how many have we blocked</div> -->
+      <!-- <div class="text-gray-400">how many have we blocked</div> -->
     </div>
 
     <div class="flex flex-row items-center gap-2 justify-end">
@@ -24,7 +24,7 @@
         variant="ghost" />
       <CopyToClipboardButton
         :clipboardText="publicLink" />
-      <img :src="me.image" class="h-[1.5rem] w-[1.5rem] rounded-full" />
+      <img :src="me.image" class="ml-2 h-[1.5rem] w-[1.5rem] rounded-full" />
     </div>
   </div>
 </template>
