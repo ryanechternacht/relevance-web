@@ -68,10 +68,9 @@
         <h2 class="mb-2">Public Link</h2>
 
         <div class="flex flex-row items-start gap-4">
-          <UFormGroup
-            :error="saveFailed && 'This is already taken by another user, try another option'">
+          <UFormGroup :error>
             <UInput v-model="publicLink"
-            class="w-[24em]"
+            class="w-[25em]"
             @update:model-value="showSaveButton = true" />
           </UFormGroup>
           <UButton v-if="showSaveButton"
@@ -80,7 +79,7 @@
           </UButton>
         </div>
 
-        <div class="text-sm text-gray-400 italic">
+        <div class="mt-2 text-sm text-gray-400 italic">
           Changing this will cause existing links to break. If you change this, please update your LinkedIn or wherever you post this link
         </div>
       </div>
@@ -151,14 +150,15 @@ router.beforeEach(async () => {
 })
 
 const publicLink = ref(me.publicLink)
-const saveFailed = ref(false)
+const error = ref(false)
 const showSaveButton = ref(false)
 async function savePublicLink () {
-  if (await usersStore.updatePublicLink({ publicLink })) {
-    showSaveButton.value = false;
-    saveFailed.value = false
+  const result = await usersStore.updatePublicLink({ publicLink })
+  if (result.error) {
+    error.value = result.error
   } else {
-    saveFailed.value = true
+    showSaveButton.value = false;
+    error.value = false
   }
 }
 </script>
