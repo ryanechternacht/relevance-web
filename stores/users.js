@@ -1,6 +1,4 @@
 import { defineStore } from 'pinia'
-import lodash_pkg from 'lodash';
-const { findIndex } = lodash_pkg;
 
 // Unlike most caches, `me` dosn't use a time based refresh (because
 // this data changes so infrequently). It can still be force 

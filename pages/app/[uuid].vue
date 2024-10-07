@@ -1,8 +1,7 @@
 <template>
   <div>
     <TheTopNav back
-      @back="goBack">
-    </TheTopNav>
+      @back="goBack" />
 
     <div class="page">
       <template v-if="outreach.relevantDescription">

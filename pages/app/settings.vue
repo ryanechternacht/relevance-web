@@ -1,16 +1,7 @@
 <template>
   <div>
-    <TheTopNav header="Settings">
-      <template #action-items>
-        <div>
-          <UButton variant="outline"
-            icon="i-heroicons-arrow-left"
-            to="/app/dashboard">
-            Back to Dashboard
-          </UButton>
-        </div>
-      </template>
-    </TheTopNav>
+    <TheTopNav back
+      @back="goBack" />
 
     <div class="page">
       <div>
@@ -114,6 +105,10 @@ const { getMeCached } = storeToRefs(usersStore)
 const [me] = await Promise.all([
   getMeCached.value()
 ])
+
+async function goBack() {
+  await navigateTo('/app/dashboard')
+}
 
 const relevancies = ref(cloneDeep(me.relevancies))
 

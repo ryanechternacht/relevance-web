@@ -9,7 +9,7 @@
       <div v-else class="py-[.375rem] px-[.625rem]">
         <img class="w-1.125rem] h-[1.125rem]" src="/logo.svg" />
       </div>
-      <!-- <span class="uppercase text-gray-900">relevance.to/{{ me.publicLink }}</span> -->
+      <span class="uppercase text-gray-600">relevance.to/{{ me.publicLink }}</span>
     </div>
 
     <div class="w-full flex flex-row items-center justify-center gap-2">
