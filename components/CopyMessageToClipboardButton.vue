@@ -35,7 +35,8 @@ const user = props.user ?? me
 const { frontendBaseUrl } = useAppConfig()
 const profileLink = computed(() => `${frontendBaseUrl}${user.publicLink}`)
 
-const message = Mustache.render(user.publicLinkMessage, { profileLink })
+const message = Mustache.render(user.publicLinkMessage, 
+  { profileLink: profileLink.value })
 
 async function copyToClipboard () {
   if (navigator?.clipboard) {
