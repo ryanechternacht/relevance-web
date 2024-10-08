@@ -168,7 +168,7 @@ const submit = async () => {
     recipient: user.email,
   })
 
-  await navigateTo(`${route.params.userid}/success`)
+  await navigateTo(`/${route.params.userid}/success`)
 }
 
 const allowSubmit = computed(() => 
