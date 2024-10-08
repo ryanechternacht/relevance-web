@@ -19,10 +19,11 @@
 
     <div class="flex flex-row items-center gap-2 justify-end">
       <!-- TODO dropdown to do either message or link -->
-      <UButton to="/app/settings"
+      <UButton v-if="!isOnboarding" 
+        to="/app/settings"
         icon="i-heroicons-cog-6-tooth"
         variant="ghost" />
-      <CopyToClipboardButton
+      <CopyToClipboardButton v-if="!isOnboarding" 
         :clipboardText="publicLink" />
       <img :src="me.image" class="ml-2 h-[1.5rem] w-[1.5rem] rounded-full" />
     </div>
@@ -36,6 +37,7 @@ import { storeToRefs } from 'pinia'
 const props = defineProps({
   header: { type: String, default: "Inbox" },
   back: { type: Boolean, default: false },
+  isOnboarding: { type: Boolean, default: false },
 })
 
 const usersStore = useUsersStore()

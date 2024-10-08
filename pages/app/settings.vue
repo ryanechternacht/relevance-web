@@ -17,15 +17,13 @@
         >
           <div v-if="!relevancies.length"
             class="text-gray-400 italic">
-            Make it clear what's relevant to you, so when people reach out,
-            they can make sure to align with your goals. 
+            Add items to share what’s relevant to you. This is what people will see before they reach out to you.
           </div>
 
           <div v-else v-for="(r, i) in relevancies"
             :key="i"
             class="mt-2 flex flex-row items-center gap-2">
             <UIcon name="i-heroicons-bars-3" class="drag-handle" />
-            <!-- <UInput v-model="r.emoji" /> -->
             <UPopover v-model:open="r.open" 
               :popper="{ placement: 'bottom-start' }">
               <UButton color="white">
@@ -90,8 +88,8 @@
 import { useUsersStore } from '@/stores/users'
 import { storeToRefs } from 'pinia'
 import { VueDraggable } from 'vue-draggable-plus'
-import lodash_pkg from 'lodash';
-const { cloneDeep, debounce } = lodash_pkg;
+import lodash_pkg from 'lodash'
+const { cloneDeep, debounce } = lodash_pkg
 
 definePageMeta({
   middleware: ['enforce-gmail-login'],
@@ -167,11 +165,5 @@ async function savePublicLink () {
   .divider {
     @apply w-[80%] mx-auto border-b border-gray-200;
   }
-}
-
-
-.relevancies-grid {
-  @apply grid gap-x-4 gap-y-2 items-center max-w-[600px];
-  grid-template-columns: auto auto 1fr auto;
 }
 </style>

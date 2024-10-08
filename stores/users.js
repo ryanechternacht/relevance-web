@@ -33,15 +33,19 @@ export const useUsersStore = defineStore('users', {
         this.users[shortcode] = data.value
       }
     },
-    async updateUser ({ relevancies }) {
+    async updateUser ({ relevancies, onboardingStep }) {
       const { data } = await useApi(`/v0.1/users/me`, {
         method: 'PATCH',
         body: {
-          relevancies
+          relevancies,
+          onboardingStep,
         }
       })
       if (data.value.relevancies !== undefined) {
         this.me.relevancies = data.value.relevancies
+      }
+      if (data.value.onboardingStep !== undefined) {
+        this.me.onboardingStep = data.value.onboardingStep
       }
     },
     async updatePublicLink ({ publicLink }) {
