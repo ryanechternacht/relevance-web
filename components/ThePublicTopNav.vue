@@ -12,8 +12,7 @@
       <span class="uppercase text-gray-900">relevance.to/{{ user.publicLink }}</span>
     </div>
     <div class="flex flex-row items-center gap-2">
-      <CopyToClipboardButton
-        :clipboardText="publicLink" />
+      <CopyLinkToClipboardButton :public-link="user.publicLink" />
     </div>
   </div>
 </template>
@@ -23,9 +22,6 @@ const props = defineProps({
   user: { type: Object, required: true },
   back: { type: Boolean, default: false },
 })
-
-const { frontendBaseUrl } = useAppConfig()
-const publicLink = computed(() => `${frontendBaseUrl}${props.user.publicLink}`)
 
 const emit = defineEmits(['back'])
 </script>

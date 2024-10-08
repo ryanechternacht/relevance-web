@@ -17,6 +17,7 @@
     "@tiptap/starter-kit": "2.7.2",
     "@tiptap/vue-3": "2.7.2",
     "dayjs-nuxt": "^2.1.11",
+    "mustache": "^4.2.0",
     "nuxt": "^3.13.0",
     "nuxt-emoji-picker": "^1.1.0",
     "nuxt-lodash": "^2.5.3",

@@ -19,12 +19,12 @@
 
     <div class="flex flex-row items-center gap-2 justify-end">
       <!-- TODO dropdown to do either message or link -->
+      <CopyLinkToClipboardButton v-if="!isOnboarding" />
+      <CopyMessageToClipboardButton v-if="!isOnboarding" />
       <UButton v-if="!isOnboarding" 
         to="/app/settings"
         icon="i-heroicons-cog-6-tooth"
         variant="ghost" />
-      <CopyToClipboardButton v-if="!isOnboarding" 
-        :clipboardText="publicLink" />
       <img :src="me.image" class="ml-2 h-[1.5rem] w-[1.5rem] rounded-full" />
     </div>
   </div>

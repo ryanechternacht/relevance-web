@@ -53,8 +53,11 @@
 
       <div class="divider" />
 
-      <div>
-        <h2 class="mb-2">Public Link</h2>
+      <div class="flex flex-col gap-2">
+        <div class="flex flex-row items-center gap-2">
+          <CopyLinkToClipboardButton />
+          <h2>Public Link</h2>
+        </div>
 
         <div class="flex flex-row items-start gap-4">
           <UFormGroup :error>
@@ -68,12 +71,30 @@
           </UButton>
         </div>
 
-        <div class="mt-2 text-sm text-gray-400 italic">
+        <div class="text-sm text-gray-400 italic">
           Changing this will cause existing links to break. If you change this, please update your LinkedIn or wherever you post this link
         </div>
       </div>
 
-      <!-- TODO set public link on this page -->
+      <div class="divider" />
+
+      <div class="flex flex-col gap-2">
+        <div class="flex flex-row items-center gap-2">
+          <CopyMessageToClipboardButton />
+          <h2>Quick Paste Message</h2>
+        </div>
+
+        <!-- <TipTapTextarea v-model="me.publicLinkMessage"
+          readonly /> -->
+        
+        <pre class="text-sm font-sans rounded-md px-2.5 py-1.5 ring-1 ring-inset ring-gray-300 dark:ring-gray-700">{{ me.publicLinkMessage }}</pre>
+
+        <div class="mt-2 text-sm text-gray-400 italic">
+          This text isn't currently editable
+        </div>
+      </div>
+
+      <div class="h-[2rem]" /> <!-- spacer -->
 
       <!-- TODO remind ppl install the chrome extension -->
       
