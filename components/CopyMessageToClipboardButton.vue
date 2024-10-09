@@ -35,14 +35,14 @@ const user = props.user ?? me
 const { frontendBaseUrl } = useAppConfig()
 const profileLink = computed(() => `${frontendBaseUrl}${user.publicLink}`)
 
-const message = Mustache.render(user.publicLinkMessage, 
-  { profileLink: profileLink.value })
+const message = computed(() => 
+  Mustache.render(user.publicLinkMessage, { profileLink: profileLink.value }))
 
 async function copyToClipboard () {
   if (navigator?.clipboard) {
-    await navigator.clipboard.writeText(message)
+    await navigator.clipboard.writeText(message.value)
   } else {
-    console.log(`can't find navigator, but would copy: \n\n${message}`)
+    console.log(`can't find navigator, but would copy: \n\n${message.value}`)
   }
 }
 </script>

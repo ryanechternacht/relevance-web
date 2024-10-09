@@ -17,7 +17,7 @@ import { useUsersStore } from '@/stores/users';
 import { storeToRefs } from 'pinia'
 
 const props = defineProps({
-  publicLink: { type: String },
+  user: { type: String },
   popoverText: { type: String, default: 'Copy Profile Link to Clipboard' },
   icon: { type: String, default: 'i-heroicons-link' },
 })
@@ -31,15 +31,15 @@ const [me] = await Promise.all([
 
 const { frontendBaseUrl } = useAppConfig()
 const fullPublicLink = computed(() => 
-  props.publicLink 
+  props.user
     ? `${frontendBaseUrl}${props.user.publicLink}`
     : `${frontendBaseUrl}${me.publicLink}`)
 
 async function copyToClipboard () {
   if (navigator?.clipboard) {
-    await navigator.clipboard.writeText(props.clipboardText)
+    await navigator.clipboard.writeText(fullPublicLink.value)
   } else {
-    console.log(`can't find navigator, but would copy '${props.clipboardText}'`)
+    console.log(`can't find navigator, but would copy '${fullPublicLink.value}'`)
   }
 }
 </script>

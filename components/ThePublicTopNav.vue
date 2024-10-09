@@ -12,7 +12,7 @@
       <span class="uppercase text-gray-900">relevance.to/{{ user.publicLink }}</span>
     </div>
     <div class="flex flex-row items-center gap-2">
-      <CopyLinkToClipboardButton :public-link="user.publicLink" />
+      <CopyLinkToClipboardButton :user />
     </div>
   </div>
 </template>
