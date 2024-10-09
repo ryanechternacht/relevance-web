@@ -1,3 +1,7 @@
+<template>
+  <div />
+</template>
+
 <script setup>
 import { useUsersStore } from '@/stores/users';
 import { storeToRefs } from 'pinia' 
@@ -12,8 +16,6 @@ const [me] = await Promise.all([
 if (!me) {
   await navigateTo('/login')
 }
-
-console.log('me', me)
 
 switch(me.onboardingStep) {
   case 'new': 

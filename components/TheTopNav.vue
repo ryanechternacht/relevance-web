@@ -19,7 +19,7 @@
 
     <div class="flex flex-row items-center gap-2 justify-end">
       <!-- TODO dropdown to do either message or link -->
-      <CopyLinkToClipboardButton v-if="!isOnboarding" />
+      <CopyLinkToClipboardButton v-if="!isOnboarding" :user="me" />
       <CopyMessageToClipboardButton v-if="!isOnboarding" />
       <UButton v-if="!isOnboarding" 
         to="/app/settings"

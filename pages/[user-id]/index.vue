@@ -1,5 +1,5 @@
 <template>
-  <ThePublicTopNav :user 
+  <ThePublicTopNav :user
     :back="hasRelevancies && page === 'submit'"
     @back="page = 'relevance'" />
 
@@ -126,7 +126,7 @@ const [user] = await Promise.all([
   getUserByShortcode.value(route.params.userid)
 ])
 
-const hasRelevancies = user.relevancies && user.relevancies.length
+const hasRelevancies = user.relevancies && !!user.relevancies.length
 
 const page = ref(hasRelevancies ? "relevance" : "submit")
 const relevancy = ref({})
@@ -135,16 +135,6 @@ async function startOutreach(r) {
   relevancy.value = r ?? {}
   page.value = 'submit'
 }
-
-const options = [
-  {
-    label: 'Services (Agency)',
-    value: 'services',
-  }, {
-    label: 'Software Product',
-    value: 'software',
-  },
-]
 
 const sender = ref()
 const snippet = ref()

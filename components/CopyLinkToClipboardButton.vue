@@ -17,23 +17,13 @@ import { useUsersStore } from '@/stores/users';
 import { storeToRefs } from 'pinia'
 
 const props = defineProps({
-  user: { type: String },
+  user: { type: Object, required: true },
   popoverText: { type: String, default: 'Copy Profile Link to Clipboard' },
   icon: { type: String, default: 'i-heroicons-link' },
 })
 
-const usersStore = useUsersStore()
-const { getMeCached } = storeToRefs(usersStore)
-
-const [me] = await Promise.all([
-  getMeCached.value(),
-])
-
 const { frontendBaseUrl } = useAppConfig()
-const fullPublicLink = computed(() => 
-  props.user
-    ? `${frontendBaseUrl}${props.user.publicLink}`
-    : `${frontendBaseUrl}${me.publicLink}`)
+const fullPublicLink = computed(() => `${frontendBaseUrl}${props.user.publicLink}`)
 
 async function copyToClipboard () {
   if (navigator?.clipboard) {

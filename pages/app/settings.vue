@@ -55,7 +55,7 @@
 
       <div class="flex flex-col gap-2">
         <div class="flex flex-row items-center gap-2">
-          <CopyLinkToClipboardButton />
+          <CopyLinkToClipboardButton :user="me" />
           <h2>Public Link</h2>
         </div>
 
