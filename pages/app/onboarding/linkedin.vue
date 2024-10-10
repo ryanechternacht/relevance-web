@@ -2,7 +2,8 @@
   <TheTopNav is-onboarding />
 
   <div class="mt-20 w-full flex flex-col items-center gap-8">
-    <ProgressSteps :current-step="2" />
+    <ProgressSteps :current-step="2"
+      @step-selected="navToStep" />
 
     <div>Don't forget to:</div>
     
@@ -25,7 +26,7 @@
     </div>
 
     <UButton @click="next">
-      Next
+      Complete Onboarding
     </UButton>
   </div>
 </template>
@@ -67,6 +68,16 @@ async function copyMessageToClipboard () {
 async function next () {
   await usersStore.updateUser({ onboardingStep: 'done' })
   await navigateTo('/app/dashboard')
+}
+
+async function navToStep({ step }) {
+  const url = {
+    0: '/app/onboarding/public-link',
+    1: '/app/onboarding/relevancies',
+    2: '/app/onboarding/linkedin',
+  }[step]
+
+  return await navigateTo(url)
 }
 </script>
 

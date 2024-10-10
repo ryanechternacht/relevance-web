@@ -18,7 +18,7 @@ import { storeToRefs } from 'pinia'
 
 const props = defineProps({
   user: { type: Object, required: true },
-  popoverText: { type: String, default: 'Copy Profile Link to Clipboard' },
+  popoverText: { type: String, default: 'Copy link to profile' },
   icon: { type: String, default: 'i-heroicons-link' },
 })
 

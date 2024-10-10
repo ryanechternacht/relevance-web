@@ -19,7 +19,7 @@ import Mustache from 'mustache'
 
 const props = defineProps({
   user: { type: Object },
-  popoverText: { type: String, default: 'Copy Relevance Message to Clipboard' },
+  popoverText: { type: String, default: 'Copy message + link to profile' },
   icon: { type: String, default: 'i-heroicons-envelope' },
 })
 

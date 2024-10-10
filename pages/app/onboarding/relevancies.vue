@@ -2,7 +2,8 @@
   <TheTopNav is-onboarding />
 
   <div class="mt-20 w-full flex flex-col items-center gap-8 px-16">
-    <ProgressSteps :current-step="1" />
+    <ProgressSteps :current-step="1"
+      @step-selected="navToStep" />
 
     <div>Let's create your relevance page:</div>
 
@@ -92,6 +93,16 @@ function onSelectEmoji (newEmoji, i) {
 async function next() {
   await usersStore.updateUser({ onboardingStep: 'linkedin', relevancies })
   await navigateTo('/app/onboarding/linkedin')
+}
+
+async function navToStep({ step }) {
+  const url = {
+    0: '/app/onboarding/public-link',
+    1: '/app/onboarding/relevancies',
+    2: '/app/onboarding/linkedin',
+  }[step]
+
+  return await navigateTo(url)
 }
 </script>
 

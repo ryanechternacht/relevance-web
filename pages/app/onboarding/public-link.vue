@@ -1,7 +1,8 @@
 <template>
   <TheTopNav is-onboarding />
   <div class="mt-20 w-full flex flex-col items-center gap-8">
-    <ProgressSteps :current-step="0" />
+    <ProgressSteps :current-step="0"
+      @step-selected="navToStep" />
 
     <div>Select your page name:</div>
 
@@ -47,6 +48,16 @@ async function next () {
     await usersStore.updateUser({ onboardingStep: 'relevancies' })
     await navigateTo('/app/onboarding/relevancies')
   }
+}
+
+async function navToStep({ step }) {
+  const url = {
+    0: '/app/onboarding/public-link',
+    1: '/app/onboarding/relevancies',
+    2: '/app/onboarding/linkedin',
+  }[step]
+
+  return await navigateTo(url)
 }
 </script>
 
