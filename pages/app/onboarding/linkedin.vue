@@ -2,7 +2,7 @@
   <TheTopNav is-onboarding />
 
   <div class="mt-20 w-full flex flex-col items-center gap-8">
-    <ProgressSteps current-step="2" />
+    <ProgressSteps :current-step="2" />
 
     <div>Don't forget to:</div>
     

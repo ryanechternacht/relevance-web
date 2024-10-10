@@ -1,7 +1,7 @@
 <template>
   <TheTopNav is-onboarding />
   <div class="mt-20 w-full flex flex-col items-center gap-8">
-    <ProgressSteps current-step="0" />
+    <ProgressSteps :current-step="0" />
 
     <div>Select your page name:</div>
 

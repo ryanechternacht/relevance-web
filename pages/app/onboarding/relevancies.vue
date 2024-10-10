@@ -2,13 +2,13 @@
   <TheTopNav is-onboarding />
 
   <div class="mt-20 w-full flex flex-col items-center gap-8 px-16">
-    <ProgressSteps current-step="1" />
+    <ProgressSteps :current-step="1" />
 
     <div>Let's create your relevance page:</div>
 
     <div v-if="!relevancies.length"
       class="text-gray-400 italic">
-      Add items to share what’s relevant to you. This is what people will see before they reach out to you.
+      Add items to share what's relevant to you. This is what people will see before they reach out to you.
     </div>
 
     <div v-else class="w-full max-w-[40rem]">
@@ -37,8 +37,7 @@
             </template>
           </UPopover>
           <MultilineInput v-model="r.description"
-            class="w-[24rem]"
-            @update:model-value="debounceRelevanciesUpdate" />
+            class="w-[24rem]" />
           <UButton icon="i-heroicons-trash"
             size="sm"
             variant="ghost"
@@ -76,7 +75,6 @@ const relevancies = ref(cloneDeep(me.relevancies))
 
 function removeRow(i) {
   relevancies.value.splice(i, 1)
-  debounceRelevanciesUpdate()
 }
 
 function addCategory() {
