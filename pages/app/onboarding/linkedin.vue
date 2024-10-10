@@ -9,11 +9,19 @@
     <div class="grid-layout">
       <UIcon name="i-heroicons-link" />
       <div class="cursor-pointer hover:underline"
-        @click="copyToClipboard">Click here to share a link to your page</div>
+        @click="copyToClipboard">Click this to share a link to your page</div>
+
+      <UIcon name="i-heroicons-envelope" />
+      <div class="cursor-pointer hover:underline"
+        @click="copyMessageToClipboard">Click this to copy a message + link to your page</div>
 
       <img src="/linkedin-logo.png"
         class="w-4 h-4" />
-      <div>Add a link to your LinkedIn Bio</div>
+      <NuxtLink class="cursor-pointer hover:underline"
+        to="https://www.linkedin.com/help/linkedin/answer/a550614/set-and-edit-away-message-on-linkedin?lang=en"
+        target="_blank">
+        Add to your LinkedIn Bio + set as a default for dms
+      </NuxtLink>
     </div>
 
     <UButton @click="next">
@@ -25,6 +33,7 @@
 <script setup>
 import { useUsersStore } from '@/stores/users';
 import { storeToRefs } from 'pinia'
+import Mustache from 'mustache'
 
 const usersStore = useUsersStore()
 const { getMeCached } = storeToRefs(usersStore)
@@ -34,13 +43,24 @@ const [me] = await Promise.all([
 ])
 
 const { frontendBaseUrl } = useAppConfig()
-const publicLink = computed(() => `${frontendBaseUrl}${me.publicLink}`)
+const profileLink = computed(() => `${frontendBaseUrl}${me.publicLink}`)
 
 async function copyToClipboard () {
   if (navigator?.clipboard) {
-    await navigator.clipboard.writeText(publicLink.value)
+    await navigator.clipboard.writeText(profileLink.value)
   } else {
-    console.log(`can't find navigator, but would copy '${publicLink.value}'`)
+    console.log(`can't find navigator, but would copy '${profileLink.value}'`)
+  }
+}
+
+const message = computed(() => 
+  Mustache.render(me.publicLinkMessage, { profileLink: profileLink.value }))
+
+async function copyMessageToClipboard () {
+  if (navigator?.clipboard) {
+    await navigator.clipboard.writeText(message.value)
+  } else {
+    console.log(`can't find navigator, but would copy '${message.value}'`)
   }
 }
 
