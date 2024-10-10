@@ -10,6 +10,7 @@ function is10MinutesOld(jsonTimestamp) {
 export const useOutreachStore = defineStore('outreach', {
   state: () => ({
     outreach: {},
+    publicOutreach: [],
   }),
   getters: {
     getOutreach: (state, statuses) => async () => {
@@ -19,6 +20,10 @@ export const useOutreachStore = defineStore('outreach', {
     getOutreachByUuid: (state) => async (uuid) => {
       await state.fetchOutreach()
       return find(state.outreach?.content, o => o.uuid === uuid)
+    },
+    getOutreachForPublic: (state) => async (uuid) => {
+      await state.fetchOutreachForPublic({ uuid })
+      return find(state.publicOutreach, o => o.content.uuid === uuid)?.content
     }
   },
   actions: {
@@ -35,26 +40,6 @@ export const useOutreachStore = defineStore('outreach', {
           generatedAt: dayjs().toJSON()
         }
       }
-    },
-    async createOutreach({ sender, body, snippet, recipient, linkedinUrl,
-      calendarUrl, companyName, companyLogoUrl,
-      relevantEmoji, relevantDescription }) {
-      const { data } = await useApi('/v0.1/outreach', {
-        method: 'POST',
-        body: {
-          body,
-          sender,
-          snippet,
-          recipient,
-          calendarUrl,
-          linkedinUrl,
-          companyName,
-          companyLogoUrl,
-          relevantEmoji,
-          relevantDescription,
-        }
-      })
-      return data.value.uuid
     },
     async updateOutreach({ uuid, status }) {
       const { data } = await useApi(`/v0.1/outreach/${uuid}`, {
@@ -75,6 +60,51 @@ export const useOutreachStore = defineStore('outreach', {
           message,
         }
       })
-    }
+    },
+    async createOutreachByPublic ({ sender, body, snippet, recipient, linkedinUrl,
+      calendarUrl, companyName, companyLogoUrl,
+      relevantEmoji, relevantDescription }) {
+      const { data } = await useApi('/v0.1/outreach', {
+        method: 'POST',
+        body: {
+          body,
+          sender,
+          snippet,
+          recipient,
+          calendarUrl,
+          linkedinUrl,
+          companyName,
+          companyLogoUrl,
+          relevantEmoji,
+          relevantDescription,
+        }
+      })
+      this.publicOutreach = {
+        content: data.value,
+        generatedAt: dayjs().toJSON()
+      }
+      return data.value.uuid
+    },
+    async fetchOutreachForPublic({ uuid, forceRefresh } = {}) {
+      const dayjs = useDayjs()
+
+      const outreach = find(this.publicOutreach, o => o.uuid === uuid)
+
+      if (!outreach
+          || forceRefresh
+          || is10MinutesOld(outreach.generatedAt))
+      {
+        const { data } = await useApi(`/v0.1/outreach/${uuid}`)
+        if (outreach) {
+          outreach.content = data.value
+          outreach.generatedAt = dayjs().toJSON()
+        } else {
+          this.publicOutreach.push({
+            content: data.value,
+            generatedAt: dayjs().toJSON()
+          })
+        }
+      }
+    },
   }
 })

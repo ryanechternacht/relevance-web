@@ -93,7 +93,7 @@ const { getOutreachByUuid } = storeToRefs(outreachStore)
 const route = useRoute()
 
 const [outreach] = await Promise.all([
-  getOutreachByUuid.value(route.params.uuid),
+  getOutreachByUuid.value(route.params.outreach),
 ])
 
 const dayjs = useDayjs()

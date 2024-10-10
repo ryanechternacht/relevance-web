@@ -123,7 +123,7 @@ const { getUserByShortcode } = storeToRefs(usersStore)
 
 const route = useRoute()
 const [user] = await Promise.all([
-  getUserByShortcode.value(route.params.userid)
+  getUserByShortcode.value(route.params.user)
 ])
 
 const hasRelevancies = user.relevancies && !!user.relevancies.length
@@ -160,7 +160,7 @@ const companyName = ref()
 const companyLogoUrl = ref()
 
 const submit = async () => {
-  await outreachStore.createOutreach({ 
+  const uuid = await outreachStore.createOutreachByPublic({ 
     sender,
     snippet,
     body,
@@ -173,7 +173,7 @@ const submit = async () => {
     recipient: user.email,
   })
 
-  await navigateTo(`/${route.params.userid}/success`)
+  await navigateTo(`/${route.params.user}/${uuid}`)
 }
 
 const allowSubmit = computed(() => 
