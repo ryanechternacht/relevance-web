@@ -64,7 +64,8 @@ export const useOutreachStore = defineStore('outreach', {
     async createOutreachByPublic ({ sender, body, snippet, recipient, linkedinUrl,
       calendarUrl, companyName, companyLogoUrl,
       relevantEmoji, relevantDescription }) {
-      const { data } = await useApi('/v0.1/outreach', {
+      const dayjs = useDayjs()
+      const { data, error } = await useApi('/v0.1/outreach', {
         method: 'POST',
         body: {
           body,
@@ -79,10 +80,10 @@ export const useOutreachStore = defineStore('outreach', {
           relevantDescription,
         }
       })
-      this.publicOutreach = {
+      this.publicOutreach.push({
         content: data.value,
         generatedAt: dayjs().toJSON()
-      }
+      })
       return data.value.uuid
     },
     async fetchOutreachForPublic({ uuid, forceRefresh } = {}) {
