@@ -136,6 +136,21 @@ async function startOutreach(r) {
   page.value = 'submit'
 }
 
+if (!user.email) {
+  await navigateTo('https://www.relevance.to', { external: true })
+}
+
+const metaTitle = `Click to chat with ${user.firstName}`
+
+useSeoMeta({
+  title: metaTitle,
+  ogTitle: metaTitle,
+  twitterCard: 'summary',
+  twitterTitle: metaTitle,
+  ogImage: '/logo.svg',
+  twiggerImage: '/logo.svg',
+})
+
 const sender = ref()
 const snippet = ref()
 const body = ref()

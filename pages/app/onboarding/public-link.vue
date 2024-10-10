@@ -9,7 +9,7 @@
       <div class="text-2xl">relevance.to/</div>
       <UFormGroup :error="!!error">
         <UInput v-model="publicLink"
-          size="2xl"
+          size="xl"
           class="ml-[2px]" />
       </UFormGroup>
     </div>

@@ -1,50 +1,53 @@
 <template>
   <TheTopNav is-onboarding />
-  <div class="mt-20 w-full flex flex-col items-center gap-8">
+
+  <div class="mt-20 w-full flex flex-col items-center gap-8 px-16">
     <ProgressSteps current-step="1" />
 
     <div>Let's create your relevance page:</div>
 
-    <VueDraggable
-      v-model="relevancies"
-      ghost-class="ghost"
-      :animation="200"
-      :scroll="false"
-      group="relevancies"
-      handle=".drag-handle"
-    >
-      <div v-if="!relevancies.length"
-        class="text-gray-400 italic">
-        Add items to share what’s relevant to you. This is what people will see before they reach out to you.
-      </div>
+    <div v-if="!relevancies.length"
+      class="text-gray-400 italic">
+      Add items to share what’s relevant to you. This is what people will see before they reach out to you.
+    </div>
 
-      <div v-else v-for="(r, i) in relevancies"
-        :key="i"
-        class="mt-2 flex flex-row items-center gap-2">
-        <UIcon name="i-heroicons-bars-3" class="drag-handle" />
-        <UPopover v-model:open="r.open" 
-          :popper="{ placement: 'bottom-start' }">
-          <UButton color="white">
-            {{ r.emoji }}
-          </UButton>
+    <div v-else class="w-full max-w-[40rem]">
+      <VueDraggable
+        v-model="relevancies"
+        ghost-class="ghost"
+        :animation="200"
+        :scroll="false"
+        group="relevancies"
+        handle=".drag-handle"
+      >
+        <div v-for="(r, i) in relevancies"
+          :key="i"
+          class="mb-2 flex flex-row items-center gap-2">
+          <UIcon name="i-heroicons-bars-3" class="drag-handle" />
+          <UPopover v-model:open="r.open" 
+            :popper="{ placement: 'bottom-start' }">
+            <UButton color="white">
+              {{ r.emoji }}
+            </UButton>
 
-          <template #panel>
-            <NuxtEmojiPicker :native="true"
-              disable-skin-tones
-              @select="(e) => onSelectEmoji(e, i)" />
-          </template>
-        </UPopover>
-        <MultilineInput v-model="r.description"
-          class="w-[24rem]"
-          @update:model-value="debounceRelevanciesUpdate" />
-        <UButton icon="i-heroicons-trash"
-          size="sm"
-          variant="ghost"
-          @click="removeRow(i)" />
-      </div>
-    </VueDraggable>
-    <UButton class="mt-2"
-      variant="outline"
+            <template #panel>
+              <NuxtEmojiPicker :native="true"
+                disable-skin-tones
+                @select="(e) => onSelectEmoji(e, i)" />
+            </template>
+          </UPopover>
+          <MultilineInput v-model="r.description"
+            class="w-[24rem]"
+            @update:model-value="debounceRelevanciesUpdate" />
+          <UButton icon="i-heroicons-trash"
+            size="sm"
+            variant="ghost"
+            @click="removeRow(i)" />
+        </div>
+      </VueDraggable>
+    </div>
+
+    <UButton variant="outline"
       @click="addCategory">
       Add Category
     </UButton>

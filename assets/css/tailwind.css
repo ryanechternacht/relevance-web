@@ -4,10 +4,18 @@
 
 @layer base {
   h1 {
-    @apply text-gray-800 text-3xl font-extrabold;
+    @apply text-gray-900 text-2xl font-extrabold;
   }
 
   h2 {
-    @apply text-gray-700 text-xl font-bold;
+    @apply text-gray-900 text-lg font-bold;
+  }
+
+  div, span {
+    @apply text-gray-700;
+  }
+
+  .subtext {
+    @apply text-gray-500;
   }
 }

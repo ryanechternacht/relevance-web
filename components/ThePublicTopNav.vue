@@ -9,7 +9,10 @@
       <div v-else class="py-[.375rem] px-[.625rem]">
         <img class="w-1.125rem] h-[1.125rem]" src="/logo.svg" />
       </div>
-      <span class="uppercase text-gray-900">relevance.to/{{ user.publicLink }}</span>
+      <span class="uppercase text-sm">
+        <span class="text-gray-500">relevance.to/</span>
+        <span class="text-gray-900">{{ user.publicLink }}</span>
+      </span>
     </div>
     <div class="flex flex-row items-center gap-2">
       <CopyLinkToClipboardButton :user />

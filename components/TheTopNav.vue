@@ -9,13 +9,16 @@
       <div v-else class="py-[.375rem] px-[.625rem]">
         <img class="w-1.125rem] h-[1.125rem]" src="/logo.svg" />
       </div>
-      <span class="uppercase text-gray-600">relevance.to/{{ me.publicLink }}</span>
+      <span class="uppercase">
+        <span class="text-gray-500">relevance.to/</span>
+        <span class="text-gray-900">{{ me.publicLink }}</span>
+      </span>
     </div>
 
-    <div class="w-full flex flex-row items-center justify-center gap-2">
+    <!-- <div class="w-full flex flex-row items-center justify-center gap-2"> -->
       <!-- TODO when we start autoblocking, track that here -->
       <!-- <div class="text-gray-400">how many have we blocked</div> -->
-    </div>
+    <!-- </div> -->
 
     <div class="flex flex-row items-center gap-2 justify-end">
       <!-- TODO dropdown to do either message or link -->
@@ -56,6 +59,6 @@ const emit = defineEmits(['back'])
 <style lang="postcss" scoped>
 .layout {
   @apply px-[8rem] pt-12 pb-4 w-full grid items-center;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
 }
 </style>
