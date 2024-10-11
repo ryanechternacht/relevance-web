@@ -11,7 +11,7 @@
       <UFormGroup :error="!!error">
         <UInput v-model="publicLink"
           size="xl"
-          class="ml-[2px]" />
+          class="ml-[2px] w-[20rem]" />
       </UFormGroup>
     </div>
 

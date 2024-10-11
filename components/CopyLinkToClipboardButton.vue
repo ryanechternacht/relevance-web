@@ -1,15 +1,9 @@
 <template>
-  <UPopover mode="hover">
+  <EasyPopover :text="popoverText">
     <UButton variant="ghost"
       :icon
       @click="copyToClipboard" />
-
-    <template #panel>
-      <div class="p-2 text-xs">
-        {{ popoverText }}
-      </div>
-    </template>
-  </UPopover>
+  </EasyPopover>
 </template>
 
 <script setup>

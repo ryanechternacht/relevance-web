@@ -4,15 +4,10 @@
 
     <div class="mx-[8rem] px-8 py-4 border rounded-md border-gray-200 min-h-[calc(100vh-100px)]">
       <div class="w-full flex flex-row justify-end">
-        <USelectMenu v-model="statuses"
+        <USelectMenu v-model="status"
           :options
-          multiple
           icon="i-heroicons-funnel"
           class="w-[12rem]">
-          <template #label>
-            <span v-if="statuses.length" class="truncate">{{ map(statuses, s => s.label).join(', ') }}</span>
-            <span class="text-gray-500 italic" v-else>Filter</span>
-          </template>
         </USelectMenu>
       </div>
 
@@ -24,32 +19,23 @@
           {{ prettyFormatDate(row.createdAt) }}
         </template>
 
-        <template #star-data="{ row }">
-          <div class="w-[16px]">
-            <div class="star flex flex-row items-center">
-              <UIcon v-if="row.status === 'starred'"
-                name="i-heroicons-star-solid"
-                variant="fill"
-                class="w-[1rem] text-blue-500" />
-              <UIcon v-else-if="row.status === 'replied'"
-                name="i-heroicons-arrow-uturn-left"
-                class="w-[1rem] text-blue-500" />
-            </div>
-          </div>
-        </template>
-
         <template #row-buttons-data="{ row }">
           <div class="w-[60px] h-[29px]">
             <div class="row-buttons flex-row items-center gap-2">
-              <UButton icon="i-heroicons-star"
-                variant="soft"
-                size="xs"
-                @click.stop="star(row)" />
-              <UButton icon="i-heroicons-archive-box"
-                variant="soft"
-                color="red"
-                size="xs"
-                @click.stop="ignore(row)" />
+              <EasyPopover text="Save">
+                <UButton icon="i-heroicons-star"
+                  variant="soft"
+                  size="xs"
+                  @click.stop="star(row)" />
+              </EasyPopover>
+
+              <EasyPopover text="Ignore">
+                <UButton icon="i-heroicons-archive-box"
+                  variant="soft"
+                  color="red"
+                  size="xs"
+                  @click.stop="ignore(row)" />
+              </EasyPopover>
             </div>
           </div>
         </template>
@@ -84,27 +70,28 @@ const options = [{
   id: 'new',
   label: 'New',
 }, {
-  id: 'starred',
-  label: 'Starred',
+  id: 'saved',
+  label: 'Saved',
 }, {
   id: 'ignored',
   label: 'Ignored',
 }, {
-  id: 'spam',
-  label: 'Spam',
-}, {
   id: 'replied',
   label: 'Replied',
 }]
-const statuses = ref([options[0], options[1]])
 
+const status = ref(options[0])
 const filteredRows = computed(() => {
-
-  if (statuses.value && statuses.value.length) {
-    const filterStatuses = map(statuses.value, s => s.id)
-    return filter(rows, r => filterStatuses.includes(r.status))
-  } else {
-    return rows
+  if (status.value.id === 'new') {
+    return filter(rows, o => o.isNew)
+  } else if (status.value.id === 'saved') {
+    return filter(rows, o => o.isSaved)
+  } else if (status.value.id === 'replied') {
+    return filter(rows, o => o.hasReplied)
+  } else if (status.value.id === 'ignored') {
+    return filter(rows, o => o.isSpam
+      || (!o.isNew && !o.isSaved && !o.hasReplied && !o.isSpam)
+    )
   }
 })
 
@@ -117,9 +104,6 @@ async function ignore (outreach) {
 }
 
 const columns = [{
-  label: '',
-  key: 'star',
-}, {
   lable: '',
   key: 'relevantEmoji'
 }, {

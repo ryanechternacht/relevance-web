@@ -24,10 +24,12 @@
       <!-- TODO dropdown to do either message or link -->
       <CopyLinkToClipboardButton v-if="!isOnboarding" :user="me" />
       <CopyMessageToClipboardButton v-if="!isOnboarding" />
-      <UButton v-if="!isOnboarding" 
-        to="/app/settings"
-        icon="i-heroicons-cog-6-tooth"
-        variant="ghost" />
+      <EasyPopover text="settings">
+        <UButton v-if="!isOnboarding" 
+          to="/app/settings"
+          icon="i-heroicons-cog-6-tooth"
+          variant="ghost" />
+      </EasyPopover>
       <img :src="me.image" class="ml-2 h-[1.5rem] w-[1.5rem] rounded-full" />
     </div>
   </div>
