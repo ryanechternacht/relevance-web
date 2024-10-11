@@ -14,16 +14,18 @@
 import Placeholder from '@tiptap/extension-placeholder'
 import StarterKit from '@tiptap/starter-kit'
 import { BubbleMenu, useEditor, EditorContent, FloatingMenu } from '@tiptap/vue-3'
+import CharacterCount from '@tiptap/extension-character-count'
 
 const props = defineProps({ 
   modelValue: { type: String },
   placeholder: { type: String, default: '' },
   minHeight: { type: String, default: "40px" },
   readonly: { type: Boolean, default: false },
-  isDemo: { type: Boolean, default: false }
+  isDemo: { type: Boolean, default: false },
+  characterCount: { type: Boolean, default: false },
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'update:characterCount'])
 
 const editor = useEditor({
   editable: !(props.readonly || props.isDemo),
@@ -32,12 +34,17 @@ const editor = useEditor({
     StarterKit,
     Placeholder.configure({
       placeholder: props.placeholder,
-    })
+    }),
+    props.characterCount ? CharacterCount.configure({
+      limit: 500,
+    }) : null,
   ],
   onBlur() {
     emit('update:modelValue', editor.value.getHTML())
   }
 })
+
+setInterval(() => emit('update:characterCount', { characters: editor.value.storage.characterCount.characters() }), 100)
 
 watch(() => props.modelValue, (newModelValue) => {
   editor.value.commands.setContent(newModelValue, false)

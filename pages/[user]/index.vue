@@ -61,10 +61,12 @@
     <div class="w-full">
       <div class="px-4 flex flex-row items-center justify-between mb-2">
         <div class="text-sm">Share how you add value with an example:</div>
-        <div class="text-gray-400 text-sm">&lt;500 characters</div>
+        <div class="text-gray-400 text-sm">{{ characterCount }}/500 characters</div>
       </div>
       <TipTapTextarea v-model="body"
-        class="w-full block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 form-textarea rounded-md placeholder-gray-400 dark:placeholder-gray-500 text-sm px-2.5 py-1.5 shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 resize-none" />
+        class="w-full block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 form-textarea rounded-md placeholder-gray-400 dark:placeholder-gray-500 text-sm px-2.5 py-1.5 shadow-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-primary-500 dark:focus:ring-primary-400 resize-none"
+        character-count
+        @update:character-count="updateCharacterCount" />
     </div>
 
     <div class="w-full">
@@ -150,6 +152,12 @@ useSeoMeta({
   ogImage: '/logo.svg',
   twiggerImage: '/logo.svg',
 })
+
+const characterCount = ref(0)
+
+async function updateCharacterCount ({ characters }) {
+  characterCount.value = characters
+}
 
 const sender = ref()
 const snippet = ref()
