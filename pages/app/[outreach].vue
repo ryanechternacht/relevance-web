@@ -4,15 +4,18 @@
       @back="goBack" />
 
     <div class="page">
-      <template v-if="outreach.relevantDescription">
-        <h1>
-          {{ outreach.relevantEmoji }} {{ outreach.relevantDescription }}
+      <div class="header">
+        <h1 v-if="outreach.relevantDescription">
+          {{ outreach.relevantEmoji }} {{ outreach.snippet }}
         </h1>
-        <h2>{{ outreach.snippet }}</h2>
-      </template>
-      <h1 v-else>
-        {{ outreach.snippet }}
-      </h1>
+        <h1 v-else>
+          {{ outreach.snippet }}
+        </h1>
+        <div>
+          <UIcon v-if="outreach.isSaved"
+            name="i-heroicons-star" />
+        </div>
+      </div>
 
       <div class="flex flex-row items-center gap-2">
         <img v-if="outreach.companyLogoUrl"
@@ -48,25 +51,30 @@
         class="mt-2 p-2 border border-gray-200 rounded-md" />
 
       <div class="w-full flex flex-row gap-4">
-        <UButton @click="reply">
+        <UButton @click="reply"
+          icon="i-heroicons-arrow-up"
+          class="">
           Reply
         </UButton>
 
         <UButton variant="outline"
+          icon="i-heroicons-star"
           @click="star">
-          Star
+          Save
         </UButton>
 
         <div class="flex-grow" />
 
         <UButton color="red"
           variant="outline"
+          icon="i-heroicons-trash"
           @click="markSpam">
-          Mark as Spam
+          Slam to Spam
         </UButton>
 
         <UButton color="red"
           variant="outline"
+          icon="i-heroicons-arrow-down"
           @click="ignore">
           Ignore
         </UButton>
@@ -113,17 +121,16 @@ async function reply () {
 }
 
 async function star () {
-  await outreachStore.updateOutreach({ uuid: outreach.uuid, status: "starred"})
-  await navigateTo('/app/dashboard')
+  await outreachStore.updateOutreach({ uuid: outreach.uuid, isSaved: true, isNew: false })
 }
 
 async function ignore () {
-  await outreachStore.updateOutreach({ uuid: outreach.uuid, status: "ignored"})
+  await outreachStore.updateOutreach({ uuid: outreach.uuid, isSaved: false, isNew: false })
   await navigateTo('/app/dashboard')
 }
 
 async function markSpam () {
-  await outreachStore.updateOutreach({ uuid: outreach.uuid, status: "spam"})
+  await outreachStore.updateOutreach({ uuid: outreach.uuid, isNew: false, isSaved: false, isSpam: true })
   await navigateTo('/app/dashboard')
 }
 </script>
@@ -132,5 +139,10 @@ async function markSpam () {
 .page {
   @apply mx-[8rem] px-16 py-8 border rounded-md border-gray-200
     min-h-[calc(100vh-100px)] flex flex-col gap-4;
+}
+
+.header { 
+  @apply grid w-full;
+  grid-template-columns: 1fr auto;
 }
 </style>

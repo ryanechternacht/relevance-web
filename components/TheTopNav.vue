@@ -30,7 +30,19 @@
           icon="i-heroicons-cog-6-tooth"
           variant="ghost" />
       </EasyPopover>
-      <img :src="me.image" class="ml-2 h-[1.5rem] w-[1.5rem] rounded-full" />
+      <UPopover :ui="{ wrapper: 'inline-flex' }">
+        <img :src="me.image" class="ml-2 h-[1.5rem] w-[1.5rem] rounded-full" />
+
+        <template #panel>
+          <div class="p-2">
+            <UButton variant="ghost"
+              color="gray"
+              @click="logout">
+              Logout
+            </UButton>
+          </div>
+        </template>
+      </UPopover>
     </div>
   </div>
 </template>
@@ -56,6 +68,12 @@ const { frontendBaseUrl } = useAppConfig()
 const publicLink = computed(() => `${frontendBaseUrl}${me.publicLink}`)
 
 const emit = defineEmits(['back'])
+
+async function logout() {
+  const { apiBaseUrl } = useAppConfig()
+
+  navigateTo(`${apiBaseUrl}v0.1/users/me/logout`, { external: true })
+}
 </script>
 
 <style lang="postcss" scoped>

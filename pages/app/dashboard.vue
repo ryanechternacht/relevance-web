@@ -20,21 +20,27 @@
         </template>
 
         <template #row-buttons-data="{ row }">
-          <div class="w-[60px] h-[29px]">
-            <div class="row-buttons flex-row items-center gap-2">
+          <div class="w-[72px] h-[29px] -mx-4">
+            <div class="row-buttons flex-row items-center gap-1">
               <EasyPopover text="Save">
                 <UButton icon="i-heroicons-star"
                   variant="soft"
                   size="xs"
-                  @click.stop="star(row)" />
+                  @click.stop="save(row)" />
               </EasyPopover>
-
               <EasyPopover text="Ignore">
                 <UButton icon="i-heroicons-archive-box"
                   variant="soft"
                   color="red"
                   size="xs"
                   @click.stop="ignore(row)" />
+              </EasyPopover>
+              <EasyPopover text="Mark Spam">
+                <UButton icon="i-heroicons-trash"
+                  variant="soft"
+                  color="red"
+                  size="xs"
+                  @click.stop="markSpam(row)" />
               </EasyPopover>
             </div>
           </div>
@@ -95,12 +101,42 @@ const filteredRows = computed(() => {
   }
 })
 
-async function star (outreach) {
-  await outreachStore.updateOutreach({ uuid: outreach.uuid, status: "starred"})
+// TODO if you're on the save page, the save button should be an "unsave"
+// same with spam
+// not sure what to do on the replied page?
+
+async function save (outreach) {
+  await outreachStore.updateOutreach({ 
+    uuid: outreach.uuid,
+    isSaved: true,
+    isNew: false,
+  })
 }
 
 async function ignore (outreach) {
-  await outreachStore.updateOutreach({ uuid: outreach.uuid, status: "ignored"})
+  await outreachStore.updateOutreach({ 
+    uuid: outreach.uuid,
+    isNew: false,
+    isSaved: false,
+  })
+}
+
+async function spam (outreach) {
+  await outreachStore.updateOutreach({ 
+    uuid: outreach.uuid,
+    isNew: false,
+    isSpam: true,
+    isSaved: false,
+  })
+}
+
+async function markSpam (outreach) {
+  await outreachStore.updateOutreach({ 
+    uuid: outreach.uuid,
+    isNew: false,
+    isSpam: true,
+    isSaved: false,
+  })
 }
 
 const columns = [{
@@ -138,13 +174,5 @@ async function goToOutreach(o) {
 
 tr:hover .row-buttons {
   @apply flex
-}
-
-:deep() td:has(.row-buttons) {
-  width: 28px;
-}
-
-:deep() td:has(.star) {
-  width: 1rem;
 }
 </style>

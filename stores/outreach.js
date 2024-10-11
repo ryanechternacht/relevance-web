@@ -41,16 +41,28 @@ export const useOutreachStore = defineStore('outreach', {
         }
       }
     },
-    async updateOutreach({ uuid, status }) {
+    async updateOutreach({ uuid, isNew, hasReplied, isSpam, isSaved }) {
       const { data } = await useApi(`/v0.1/outreach/${uuid}`, {
         method: 'PATCH',
         body: {
-          status,
+          isNew,
+          hasReplied,
+          isSpam,
+          isSaved,
         }
       })
       const o = find(this.outreach?.content, o => o.uuid === uuid)
-      if (data.value.status !== undefined) {
-        o.status = data.value.status
+      if (data.value.isNew !== undefined) {
+        o.isNew = data.value.isNew
+      }
+      if (data.value.hasReplied !== undefined) {
+        o.hasReplied = data.value.hasReplied
+      }
+      if (data.value.isSpam !== undefined) {
+        o.isSpam = data.value.isSpam
+      }
+      if (data.value.isSaved !== undefined) {
+        o.isSaved = data.value.isSaved
       }
     },
     async replyToOutreach({ uuid, message }) {

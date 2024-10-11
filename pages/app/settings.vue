@@ -116,8 +116,6 @@ definePageMeta({
   middleware: ['enforce-gmail-login'],
 })
 
-const { apiBaseUrl } = useAppConfig()
-
 const usersStore = useUsersStore()
 const { getMeCached } = storeToRefs(usersStore)
 

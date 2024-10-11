@@ -11,7 +11,7 @@
     @apply text-gray-900 text-lg font-bold;
   }
 
-  div, span {
+  :not(> button) div, :not(> button) span {
     @apply text-gray-700;
   }
 

@@ -61,6 +61,6 @@ export const useUsersStore = defineStore('users', {
         this.me.publicLink = data.value.publicLink
         return data.value
       }
-    }
+    },
   },
 })
