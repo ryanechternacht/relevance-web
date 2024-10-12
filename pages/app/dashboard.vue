@@ -15,7 +15,7 @@
         :rows="filteredRows"
         :empty-state="{ icon: 'i-heroicons-inbox', label: 'No new outreach.' }"
         @select="goToOutreach">
-        <template #createdAt-data="{ row }">
+        <!-- <template #createdAt-data="{ row }">
           {{ prettyFormatDate(row.createdAt) }}
         </template>
 
@@ -44,6 +44,40 @@
               </EasyPopover>
             </div>
           </div>
+        </template> -->
+
+        <template #createdAt-data="{ row }">
+          <div class="w-[150px] h-[29px]">
+            <div class="received flex flex-row items-center">
+              {{ prettyFormatDate(row.createdAt) }}
+            </div>
+            <div class="row-buttons w-full hidden flex-row items-center gap-1">
+              <EasyPopover text="Save">
+                <UButton icon="i-heroicons-star"
+                  variant="soft"
+                  size="xs"
+                  @click.stop="save(row)" />
+              </EasyPopover>
+              <EasyPopover text="Ignore">
+                <UButton icon="i-heroicons-archive-box"
+                  variant="soft"
+                  color="red"
+                  size="xs"
+                  @click.stop="ignore(row)" />
+              </EasyPopover>
+              <EasyPopover text="Mark Spam">
+                <UButton icon="i-heroicons-trash"
+                  variant="soft"
+                  color="red"
+                  size="xs"
+                  @click.stop="markSpam(row)" />
+              </EasyPopover>
+            </div>
+          </div>
+        </template>
+
+        <template #snippet-data="{ row }">
+          {{ row.snippet.length <= 50 ? row.snippet : row.snippet.substring(0, 50) + "..." }}
         </template>
       </UTable>
     </div>
@@ -150,16 +184,16 @@ const columns = [{
   label: 'Snippet',
   key: 'snippet',
 }, {
-  label: 'Copmany Name',
+  label: 'Company Name',
   key: 'companyName',
 }, {
   label: 'Received',
   key: 'createdAt',
   sortable: true,
-}, {
-  // row buttons
-  key: 'row-buttons',
-  label: '',
+// }, {
+//   // row buttons
+//   key: 'row-buttons',
+//   label: '',
 }]
 
 async function goToOutreach(o) {
@@ -168,11 +202,11 @@ async function goToOutreach(o) {
 </script>
 
 <style lang="postcss" scoped>
-.row-buttons {
-  @apply hidden;
-}
-
 tr:hover .row-buttons {
   @apply flex
+}
+
+tr:hover .received {
+  @apply hidden
 }
 </style>

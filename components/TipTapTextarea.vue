@@ -44,7 +44,9 @@ const editor = useEditor({
   }
 })
 
-setInterval(() => emit('update:characterCount', { characters: editor.value.storage.characterCount.characters() }), 100)
+async function onMounted() {
+  setInterval(() => emit('update:characterCount', { characters: editor.value.storage.characterCount.characters() }), 100)
+}
 
 watch(() => props.modelValue, (newModelValue) => {
   editor.value.commands.setContent(newModelValue, false)

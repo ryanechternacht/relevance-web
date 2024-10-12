@@ -6,10 +6,10 @@
     <div class="page">
       <div class="header">
         <h1 v-if="outreach.relevantDescription">
-          {{ outreach.relevantEmoji }} {{ outreach.snippet }}
-        </h1>
-        <h1 v-else>
-          {{ outreach.snippet }}
+          {{ outreach.relevantEmoji }} 
+          {{ outreach.snippet.length <= 100 
+            ? outreach.snippet 
+            : outreach.snippet.substring(0, 100) + "..." }}
         </h1>
         <div>
           <UIcon v-if="outreach.isSaved"

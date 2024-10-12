@@ -52,10 +52,14 @@
     <div class="w-full">
       <div class="px-4 flex flex-row items-center justify-between mb-2">
         <div class="text-sm">Why is your solution relevant to me?</div>
-        <div class="text-gray-400 text-sm">&lt;50 characters</div>
+        <div class="text-gray-400 text-sm">{{ snippet.length }}/50 characters</div>
       </div>
       <UInput v-model="snippet"
         class="w-full" />
+      <div v-if="snippet.length > 50" 
+        class="mt-2 ml-2 text-xs text-red-500 italic">
+        We may truncate this to 50 characters when showing {{ user.firstName }}
+      </div>
     </div>
 
     <div class="w-full">
@@ -160,8 +164,8 @@ async function updateCharacterCount ({ characters }) {
 }
 
 const sender = ref()
-const snippet = ref()
-const body = ref()
+const snippet = ref('')
+const body = ref('')
 const linkedinUrl = ref()
 const calendarUrl = ref()
 const companyName = ref()

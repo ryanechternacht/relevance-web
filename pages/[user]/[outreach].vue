@@ -28,7 +28,11 @@
           class="text-blue-500" />
       </div>
 
-      <h2 class="w-full">{{ outreach.snippet }}</h2>
+      <h2 class="w-full">
+        {{ outreach.snippet.length <= 100 
+            ? outreach.snippet 
+            : outreach.snippet.substring(0, 100) + "..." }}
+      </h2>
 
       <TipTapTextarea v-model="outreach.body"
         class="w-full"
