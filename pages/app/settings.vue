@@ -71,7 +71,7 @@
           </UButton>
         </div>
 
-        <div class="text-sm text-gray-400 italic">
+        <div class="text-sm text-gray-500 italic">
           Changing this will cause existing links to break. If you change this, please update your LinkedIn or wherever you post this link
         </div>
       </div>
@@ -89,8 +89,29 @@
         
         <pre class="text-sm font-sans rounded-md px-2.5 py-1.5 ring-1 ring-inset ring-gray-300 dark:ring-gray-700">{{ me.publicLinkMessage }}</pre>
 
-        <div class="mt-2 text-sm text-gray-400 italic">
+        <div class="text-sm text-gray-500 italic">
           This text isn't currently editable
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <h2>Google Auth</h2>
+
+        <div class="text-sm inline-flex gap-1 items-center">Reply in Relevance: 
+          <template v-if="false">
+            <UIcon name="i-heroicons-check" class="text-green-500 w-4 h-4" /> 
+            <span class="font-bold">Yes</span>
+          </template>
+          <template v-else>
+            <UIcon name="i-heroicons-x-mark" class="text-red-500 w-4 h-4" />
+            <span class="font-bold">Permission Needed</span>
+          </template>
+        </div>
+        
+        <GoogleOAuthButton force-consent />
+
+        <div class="text-sm text-gray-500 italic">
+          Be sure to click the checkbox to grant permission to Relevance to send email in the OAuth flow.
         </div>
       </div>
 
