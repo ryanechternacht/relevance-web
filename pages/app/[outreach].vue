@@ -46,7 +46,7 @@
 
       <div class="border-b borer-gray-600 w-full" />
 
-      <TipTapTextarea v-model="replyText"
+      <TipTapTextarea v-if="me.hasSendScope" v-model="replyText"
         min-height="8rem"
         class="mt-2 p-2 border border-gray-200 rounded-md" />
 
@@ -56,6 +56,31 @@
           class="">
           Reply
         </UButton>
+
+        <UModal v-model="replyWarningIsOpen">
+          <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+            <template #header>
+              Google OAuth Permission  Needed
+            </template>
+
+            <div class="text-sm">
+              To quickly send an email response, we need an extra
+              permission from your Google Account. To set this up, 
+              click the Link below.
+            </div>
+
+            <div class="mt-4 text-sm">
+              Be sure to check the box for "Send email on your behalf".
+            </div>
+
+            <GoogleOAuthButton force-consent
+              class="mt-4" />
+
+            <template #footer>
+              <UButton @click="replyWarningIsOpen = false">Ok</UButton>
+            </template>
+          </UCard>
+        </UModal>
 
         <UButton variant="outline"
           icon="i-heroicons-star"
@@ -79,7 +104,7 @@
           Ignore
         </UButton>
       </div>
-      <div class="italic text-gray-500 text-sm">
+      <div v-if="me.hasSendScope" class="italic text-gray-500 text-sm">
         This reply will be sent from your email to the sender.
         You can find a copy of it in your sent mail.
       </div>
@@ -88,6 +113,7 @@
 </template>
 
 <script setup>
+import { useUsersStore } from '@/stores/users'
 import { useOutreachStore } from '@/stores/outreach'
 import { storeToRefs } from 'pinia'
 
@@ -100,8 +126,12 @@ const { getOutreachByUuid } = storeToRefs(outreachStore)
 
 const route = useRoute()
 
-const [outreach] = await Promise.all([
+const usersStore = useUsersStore()
+const { getMeCached } = storeToRefs(usersStore)
+
+const [outreach, me] = await Promise.all([
   getOutreachByUuid.value(route.params.outreach),
+  getMeCached.value(),
 ])
 
 const dayjs = useDayjs()
@@ -115,9 +145,15 @@ async function goBack() {
 
 const replyText = ref()
 
+const replyWarningIsOpen = ref(false)
+
 async function reply () {
-  await outreachStore.replyToOutreach({ uuid: outreach.uuid, message: replyText })
-  await navigateTo('/app/dashboard')
+  if (me.hasSendScope) {
+    await outreachStore.replyToOutreach({ uuid: outreach.uuid, message: replyText })
+    await navigateTo('/app/dashboard')
+  } else {
+    replyWarningIsOpen.value = true
+  }
 }
 
 async function star () {

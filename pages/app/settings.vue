@@ -98,7 +98,7 @@
         <h2>Google Auth</h2>
 
         <div class="text-sm inline-flex gap-1 items-center">Reply in Relevance: 
-          <template v-if="false">
+          <template v-if="me.hasSendScope">
             <UIcon name="i-heroicons-check" class="text-green-500 w-4 h-4" /> 
             <span class="font-bold">Yes</span>
           </template>
@@ -141,7 +141,7 @@ const usersStore = useUsersStore()
 const { getMeCached } = storeToRefs(usersStore)
 
 const [me] = await Promise.all([
-  getMeCached.value()
+  getMeCached.value(),
 ])
 
 async function goBack() {
