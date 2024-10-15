@@ -51,11 +51,12 @@
         class="mt-2 p-2 border border-gray-200 rounded-md" />
 
       <div class="w-full flex flex-row gap-4">
-        <UButton @click="reply"
+        <SubmitButton :submission-state="replyState"
           icon="i-heroicons-arrow-up"
-          class="">
-          Reply
-        </UButton>
+          readyText="Reply"
+          submittingText="Replying"
+          submittedText="Replied"
+          @click="reply" />
 
         <UModal v-model="replyWarningIsOpen">
           <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
@@ -82,27 +83,33 @@
           </UCard>
         </UModal>
 
-        <UButton variant="outline"
+        <SubmitButton :submission-state="saveState"
           icon="i-heroicons-star"
-          @click="star">
-          Save
-        </UButton>
+          variant="outline"
+          readyText="Save"
+          submittingText="Saving"
+          submittedText="Saved"
+          @click="save" />
 
         <div class="flex-grow" />
 
-        <UButton color="red"
-          variant="outline"
+        <SubmitButton :submission-state="markSpamState"
           icon="i-heroicons-trash"
-          @click="markSpam">
-          Slam to Spam
-        </UButton>
-
-        <UButton color="red"
           variant="outline"
+          color="red"
+          readyText="Slam to Spam"
+          submittingText="Slamming to Spam"
+          submittedText="Slammed to Spam"
+          @click="markSpam" />
+
+        <SubmitButton :submission-state="ignoreState"
           icon="i-heroicons-arrow-down"
-          @click="ignore">
-          Ignore
-        </UButton>
+          variant="outline"
+          color="red"
+          readyText="Ignore"
+          submittingText="Ignoring"
+          submittedText="Ignored"
+          @click="ignore" />
       </div>
       <div v-if="me.hasSendScope" class="italic text-gray-500 text-sm">
         This reply will be sent from your email to the sender.
@@ -147,28 +154,28 @@ const replyText = ref()
 
 const replyWarningIsOpen = ref(false)
 
-async function reply () {
+const { submissionState: replyState, submitFn: reply } = useSubmit(async () => {
   if (me.hasSendScope) {
     await outreachStore.replyToOutreach({ uuid: outreach.uuid, message: replyText })
     await navigateTo('/app/dashboard')
   } else {
     replyWarningIsOpen.value = true
   }
-}
+})
 
-async function star () {
+const { submissionState: saveState, submitFn: save } = useSubmit(async () => {
   await outreachStore.updateOutreach({ uuid: outreach.uuid, isSaved: true, isNew: false })
-}
+})
 
-async function ignore () {
+const { submissionState: ignoreState, submitFn: ignore } = useSubmit(async () => {
   await outreachStore.updateOutreach({ uuid: outreach.uuid, isSaved: false, isNew: false })
   await navigateTo('/app/dashboard')
-}
+})
 
-async function markSpam () {
+const { submissionState: markSpamState, submitFn: markSpam } = useSubmit(async () => {
   await outreachStore.updateOutreach({ uuid: outreach.uuid, isNew: false, isSaved: false, isSpam: true })
   await navigateTo('/app/dashboard')
-}
+})
 </script>
 
 <style lang="postcss" scoped>

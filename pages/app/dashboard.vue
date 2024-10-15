@@ -77,7 +77,7 @@
         </template>
 
         <template #snippet-data="{ row }">
-          {{ row.snippet.length <= 50 ? row.snippet : row.snippet.substring(0, 50) + "..." }}
+          {{ row.snippet?.length <= 50 ? row.snippet : row.snippet?.substring(0, 50) + "..." }}
         </template>
       </UTable>
     </div>
