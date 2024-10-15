@@ -110,7 +110,10 @@
     </div>
 
     <div>
-      <UButton @click="submit" :disabled="!allowSubmit">Submit</UButton>
+      <SubmitButton 
+        :disabled="!allowSubmit"
+        :submission-state
+        @click="submitFn" />
     </div>
   </div>
 
@@ -171,7 +174,8 @@ const calendarUrl = ref()
 const companyName = ref()
 const companyLogoUrl = ref()
 
-const submit = async () => {
+
+const { submissionState, submitFn } = useSubmit(async () => {
   const uuid = await outreachStore.createOutreachByPublic({ 
     sender,
     snippet,
@@ -186,7 +190,7 @@ const submit = async () => {
   })
 
   await navigateTo(`/${route.params.user}/${uuid}`)
-}
+})
 
 const allowSubmit = computed(() => 
   sender.value && snippet.value && body.value)
