@@ -20,7 +20,7 @@ const googleLoginLink = computed(() =>
   `&login_redirect_url=${stytch.loginRedirectUri}` +
   `&signup_redirect_url=${stytch.signupRedirectUri}` + 
   `&custom_scopes=${stytch.scopes}` + 
-  `${props.forceConsent ? '&provider_prompt=consent' : ''}`
+  `${props.forceConsent ? '&provider_prompt=consent&provider_access_type=offline' : ''}`
 )
 </script>
 
