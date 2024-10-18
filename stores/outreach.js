@@ -42,6 +42,7 @@ export const useOutreachStore = defineStore('outreach', {
       }
     },
     async updateOutreach({ uuid, isNew, hasReplied, isSpam, isSaved }) {
+      const csrfToken = useCookie('relevance-csrf-token')
       const { data } = await useApi(`/v0.1/outreach/${uuid}`, {
         method: 'PATCH',
         body: {
@@ -49,6 +50,7 @@ export const useOutreachStore = defineStore('outreach', {
           hasReplied,
           isSpam,
           isSaved,
+          csrfToken,
         }
       })
       const o = find(this.outreach?.content, o => o.uuid === uuid)
@@ -66,16 +68,19 @@ export const useOutreachStore = defineStore('outreach', {
       }
     },
     async replyToOutreach({ uuid, message }) {
+      const csrfToken = useCookie('relevance-csrf-token')
       const { data } = await useApi(`/v0.1/outreach/${uuid}/reply`, {
         method: 'POST',
         body: {
           message,
+          csrfToken,
         }
       })
     },
     async createOutreachByPublic ({ sender, body, snippet, recipient, linkedinUrl,
       calendarUrl, companyName, companyLogoUrl,
       relevantEmoji, relevantDescription }) {
+      const csrfToken = useCookie('relevance-csrf-token')
       const dayjs = useDayjs()
       const { data, error } = await useApi('/v0.1/outreach', {
         method: 'POST',
@@ -90,6 +95,7 @@ export const useOutreachStore = defineStore('outreach', {
           companyLogoUrl,
           relevantEmoji,
           relevantDescription,
+          csrfToken,
         }
       })
       this.publicOutreach.push({

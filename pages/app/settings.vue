@@ -15,7 +15,7 @@
           group="relevancies"
           handle=".drag-handle"
         >
-          <div v-if="!relevancies.length"
+          <div v-if="!relevancies?.length"
             class="text-gray-400 italic">
             Add items to share what’s relevant to you. This is what people will see before they reach out to you.
           </div>

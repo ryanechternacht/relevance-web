@@ -34,11 +34,13 @@ export const useUsersStore = defineStore('users', {
       }
     },
     async updateUser ({ relevancies, onboardingStep }) {
+      const csrfToken = useCookie('relevance-csrf-token')
       const { data } = await useApi(`/v0.1/users/me`, {
         method: 'PATCH',
         body: {
           relevancies,
           onboardingStep,
+          csrfToken,
         }
       })
       if (data.value.relevancies !== undefined) {
@@ -49,14 +51,20 @@ export const useUsersStore = defineStore('users', {
       }
     },
     async updatePublicLink ({ publicLink }) {
+      // TODO is there a better way to do this? I tried attached it to
+      // the fetch in useApi directly, but it failed for client side
+      // calls
+      const csrfToken = useCookie('relevance-csrf-token')
+      
       const { data, error } = await useApi(`/v0.1/users/me/public-link`, {
         method: 'PATCH',
         body: {
-          publicLink
+          publicLink,
+          csrfToken,
         }
       })
       if (error.value) {
-        return { error: error.value.data.error}
+        return { error: error.value.data}
       } else {
         this.me.publicLink = data.value.publicLink
         return data.value
