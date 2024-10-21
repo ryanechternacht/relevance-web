@@ -64,7 +64,7 @@ export const useUsersStore = defineStore('users', {
         }
       })
       if (error.value) {
-        return { error: error.value.data}
+        return { error: error.value.data?.error }
       } else {
         this.me.publicLink = data.value.publicLink
         return data.value
